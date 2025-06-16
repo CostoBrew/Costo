@@ -1,113 +1,290 @@
-# Costobrew Coffee Studio Web Application
+# ☕ Costobrew - Coffee Studio Web Application
 
-A modern, secure web application for coffee enthusiasts built with PHP and Firebase Authentication.
+A modern, responsive web application for custom coffee blending and ordering, featuring Firebase authentication, Google Sign-In, and an interactive Coffee Studio for creating personalized coffee blends.
 
-## Features
+> 👥 **Team Project Setup:** This is a collaborative team project. Firebase configuration and environment files will be provided by the project lead. Follow the setup instructions below to get started.
 
-- 🔥 **Firebase Authentication** - Secure user registration and login
-- ☕ **Coffee Studio** - DIY and premade coffee customization
-- 🛍️ **Shopping Cart** - Add and manage coffee orders
-- 👥 **Community** - Browse coffee products and reviews
-- ⚙️ **User Settings** - Account management and preferences
-- 🔒 **Security** - CSRF protection, rate limiting, and secure headers
-- 📱 **Responsive Design** - Beautiful UI with Bootstrap and custom styling
+## ✨ Features
 
-## Requirements
+- **🔥 Firebase Authentication** - Secure user authentication with Google Sign-In integration
+- **☕ Coffee Studio** - Interactive DIY coffee blending and premade selections
+- **🛒 Shopping Cart** - Add custom blends to cart and manage orders
+- **📱 Responsive Design** - Mobile-first design with Bootstrap 5
+- **🎨 Modern UI** - Apple Garamond typography and coffee-themed design
+- **🔒 Security** - CSRF protection, rate limiting, and secure middleware
 
-- PHP 7.4 or higher
-- Composer
-- Web server (Apache/Nginx)
-- Firebase project
+## 🚀 Quick Start
 
-## Installation
+### Prerequisites
 
-### 1. Clone the Repository
+- **PHP 7.4+** (Recommended: PHP 8.1+)
+- **Composer** (Dependency manager)
+- **Git** (Version control)
+
+> 📝 **Note:** This is a team project. Firebase keys and environment configuration will be provided by the project lead.
+
+### 1. Clone & Install
 
 ```bash
-git clone https://github.com/your-username/costobrew.git
+# Clone the repository
+git clone <team-repo-url> costobrew
 cd costobrew
-```
 
-### 2. Install Dependencies
-
-```bash
+# Install PHP dependencies
 composer install
 ```
 
-### 3. Environment Setup
+### 2. Get Project Files from Team Lead
 
-1. Copy the environment example file:
+**Contact the project lead to obtain:**
+- `.env` file (environment configuration)
+- `config/firebase-service-account.json` (Firebase authentication keys)
+
+Place these files in the project root and config directory respectively.
+
+> ⚠️ **Important:** Never commit `.env` or Firebase service account files to version control!
+
+### 3. Start Development Server
+
 ```bash
-cp .env.example .env
+# Start PHP development server
+php -S localhost:8000
+
+# Application will be available at:
+# http://localhost:8000
 ```
 
-2. Update the `.env` file with your configuration:
-```env
-# Application Environment
-APP_ENV=development
-APP_URL=http://localhost:8000
+### 4. Verify Setup
 
-# Database Configuration
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=costobrew_v2
-DB_USER=root
-DB_PASS=your_password
-DB_CHARSET=utf8mb4
+1. Open browser to `http://localhost:8000`
+2. Test Firebase authentication by trying to login/signup
+3. Explore Coffee Studio features
 
-# Firebase Authentication
-FIREBASE_PROJECT_ID=your-firebase-project-id
-FIREBASE_SERVICE_ACCOUNT_PATH=./config/firebase-service-account.json
-REQUIRE_EMAIL_VERIFICATION=false
-MAX_TOKEN_AGE=3600
-USER_RATE_LIMIT=100
-```
+> 🎉 **You're ready to develop!** The application should be running with full Firebase authentication.
 
-### 4. Firebase Setup
+### 4. Firebase Configuration
 
-Firebase authentication is required for user management. Follow these steps:
-
-#### Option 1: Use the Setup Wizard
-1. Start your web server
-2. Visit `http://localhost:8000/firebase-setup.php`
-3. Follow the step-by-step instructions
-
-#### Option 2: Manual Setup
+#### Step 1: Create Firebase Project
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Create a new project
-3. Enable Authentication with Email/Password
-4. Create a service account:
-   - Go to Project Settings → Service Accounts
-   - Generate new private key
-   - Download the JSON file
-   - Save as `config/firebase-service-account.json`
-5. Get your web app config:
-   - Project Settings → General → Your apps
-   - Add web app
-   - Copy the config object
-6. Update the Firebase config in:
-   - `app/view/auth/login.php`
-   - `app/view/auth/signup.php`
+3. Enable Authentication > Sign-in method > Google
 
-### 5. Database Setup (Optional)
+#### Step 2: Get Service Account
+1. Project Settings > Service Accounts
+2. Generate new private key
+3. Save as `config/firebase-service-account.json`
 
-If you're using a database, create the database and update the connection details in `.env`.
+#### Step 3: Get Web Config
+1. Project Settings > General > Your apps
+2. Add web app and copy config
+3. Update `.env` with the values
 
-### 6. Web Server Configuration
+**Example `config/firebase-service-account.json`:**
+```json
+{
+  "type": "service_account",
+  "project_id": "your-project-id",
+  "private_key_id": "...",
+  "private_key": "...",
+  "client_email": "...",
+  "client_id": "...",
+  "auth_uri": "...",
+  "token_uri": "...",
+  "auth_provider_x509_cert_url": "...",
+  "client_x509_cert_url": "..."
+}
+```
 
-#### Apache
-Make sure your `.htaccess` file has the following content:
+> 📋 **Detailed Firebase setup instructions:** See `FIREBASE_SETUP.md`
+> � **Google Sign-In setup instructions:** See `GOOGLE_SIGNIN_SETUP.md`
+
+### 5. Web Server Configuration
+
+#### Apache (.htaccess included)
 ```apache
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
+# Ensure mod_rewrite is enabled
+# .htaccess file is already configured
+```
 
-# Security headers
-Header always set X-Frame-Options DENY
-Header always set X-Content-Type-Options nosniff
-Header always set X-XSS-Protection "1; mode=block"
-Header always set Referrer-Policy "strict-origin-when-cross-origin"
+#### Nginx
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com;
+    root /path/to/costobrew;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+```
+
+#### PHP Built-in Server (Development)
+```bash
+php -S localhost:8000 -t public index.php
+```
+
+### 6. File Permissions
+
+```bash
+# Make cache and logs writable
+chmod -R 755 cache/
+chmod -R 755 logs/
+
+# Secure sensitive files
+chmod 600 .env
+chmod 600 config/firebase-service-account.json
+```
+
+## 📁 Project Structure
+
+```
+costobrew/
+├── app/
+│   ├── config/          # Configuration files
+│   ├── controller/      # Application controllers
+│   ├── core/           # Core framework files
+│   ├── middleware/     # Security & auth middleware
+│   ├── model/          # Data models
+│   └── view/           # HTML templates
+├── cache/              # Application cache
+├── logs/               # Application logs
+├── src/
+│   ├── assets/         # Images & static files
+│   ├── css/           # Stylesheets
+│   └── js/            # JavaScript files
+├── config/            # Firebase & external configs
+├── .env               # Environment variables
+├── .htaccess          # Apache configuration
+├── composer.json      # PHP dependencies
+└── index.php          # Application entry point
+```
+
+## 🔧 Development
+
+### Running Locally
+```bash
+# Start PHP development server (this is what we use)
+php -S localhost:8000
+```
+
+> 📝 **Team Note:** We use the PHP built-in development server for this project. No need for XAMPP/WAMP.
+
+### Key URLs
+- **Home:** `/`
+- **Coffee Studio:** `/studio`
+- **DIY Blends:** `/studio/diy`
+- **Premade Blends:** `/studio/premade`
+- **Login:** `/login`
+- **Cart:** `/cart`
+
+### Debugging
+```bash
+# Check PHP errors
+tail -f logs/php-error.log
+
+# Test Firebase connection
+php -r "require 'vendor/autoload.php'; echo 'Dependencies loaded successfully';"
+```
+
+## 🛡️ Security Features
+
+- **CSRF Protection** - All forms protected with CSRF tokens
+- **Rate Limiting** - Prevents brute force attacks
+- **Input Validation** - Server-side validation for all inputs
+- **Secure Headers** - CSP, HSTS, and security headers
+- **Firebase Auth** - Industry-standard authentication
+
+## 📱 Browser Support
+
+- **Chrome** 90+ ✅
+- **Firefox** 88+ ✅
+- **Safari** 14+ ✅
+- **Edge** 90+ ✅
+- **Mobile browsers** ✅
+
+## 🚀 Production Deployment
+
+### 1. Environment Setup
+```bash
+# Set production environment
+APP_ENV=production
+FIREBASE_DISABLE_SSL_VERIFY=false
+```
+
+### 2. Optimization
+```bash
+# Optimize Composer autoloader
+composer install --no-dev --optimize-autoloader
+
+# Clear development cache
+rm -rf cache/*
+```
+
+### 3. Security Checklist
+- [ ] Update all default passwords
+- [ ] Enable HTTPS
+- [ ] Configure proper file permissions
+- [ ] Set up regular backups
+- [ ] Monitor logs for security issues
+- [ ] Update `.env` with production values
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+**1. Firebase Authentication Not Working**
+```bash
+# Check service account file exists
+ls -la config/firebase-service-account.json
+
+# Verify environment variables
+cat .env | grep FIREBASE
+```
+
+**2. Database Connection Issues**
+```bash
+# Test database connection
+php -r "
+$pdo = new PDO('mysql:host=localhost;dbname=costobrew_db', 'user', 'pass');
+echo 'Database connected successfully';
+"
+```
+
+**3. 404 Errors**
+- Ensure `.htaccess` is in place for Apache
+- Check web server URL rewriting is enabled
+- Verify `index.php` is in the correct location
+
+**4. Permission Errors**
+```bash
+# Fix file permissions
+find . -type f -exec chmod 644 {} \;
+find . -type d -exec chmod 755 {} \;
+chmod 600 .env config/firebase-service-account.json
+```
+
+## 📞 Support
+
+For setup assistance or bug reports:
+- **Email:** support@costobrew.com
+- **Documentation:** Check `FIREBASE_SETUP.md` and `GOOGLE_SIGNIN_SETUP.md`
+
+## 📄 License
+
+This project is proprietary software. All rights reserved.
+
+---
+
+Made with ☕ by the Costobrew Team
 
 # Prevent access to PHP files in certain directories
 <FilesMatch "\.php$">
