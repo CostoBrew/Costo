@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <link href="/src/css/style.css" rel="stylesheet">
 </head>
-<body data-bs-theme="dark">
+<body data-bs-theme="dark" class="text-white">
 
 <?php include __DIR__ . '/includes/header.php'; ?>
 
