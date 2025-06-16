@@ -2,21 +2,19 @@
 
 /**
  * Coffee Studio Controller
- * Handles DIY Coffee (8 stages) and Premade Coffee (3 stages) with POS-like counter
+ * Handles DIY Coffee (7 stages) and Premade Coffee (3 stages) with POS-like counter
  */
 
 class CoffeeStudioController
-{
-    /**
+{    /**
      * Coffee Studio main page (selector between DIY and Premade)
      */
     public function index()
     {
-        require_once __DIR__ . '/../view/studio/index.php';
+        require_once __DIR__ . '/../view/studio/start.php';
     }
-    
-    // ========================================
-    // DIY COFFEE - 8 STAGES
+      // ========================================
+    // DIY COFFEE - 7 STAGES
     // ========================================
     
     /**
@@ -25,85 +23,73 @@ class CoffeeStudioController
     public function diyStart()
     {
         $this->initializeSession();
-        require_once __DIR__ . '/../view/studio/diy/start.php';
-    }
-    
-    /**
-     * Stage 1: Coffee info page
-     */
-    public function diyInfo()
-    {
-        require_once __DIR__ . '/../view/studio/diy/info.php';
-    }
-    
-    /**
-     * Stage 2: Cup Size selection
+        require_once __DIR__ . '/../view/studio/diy/start.php';    }
+      /**
+     * Stage 1: Cup Size selection
      */
     public function diyCupSize()
     {
         $cupSizes = $this->getCupSizes();
-        require_once __DIR__ . '/../view/studio/diy/cup-size.php';
+        require_once __DIR__ . '/../view/studio/diy/cup-selector.php';
     }
-    
-    /**
-     * Stage 3: Coffee beans type
+      /**
+     * Stage 2: Coffee beans type
      */
     public function diyCoffeeBeans()
     {
         $coffeeBeans = $this->getCoffeeBeans();
-        require_once __DIR__ . '/../view/studio/diy/coffee-beans.php';
+        require_once __DIR__ . '/../view/studio/diy/beans-selector.php';
     }
     
     /**
-     * Stage 4: Milk Type
+     * Stage 3: Milk Type
      */
     public function diyMilkType()
     {
         $milkTypes = $this->getMilkTypes();
-        require_once __DIR__ . '/../view/studio/diy/milk-type.php';
+        require_once __DIR__ . '/../view/studio/diy/milk-selector.php';
     }
     
     /**
-     * Stage 5: Sweeteners Type
+     * Stage 4: Sweeteners Type
      */
     public function diySweeteners()
     {
         $sweeteners = $this->getSweeteners();
-        require_once __DIR__ . '/../view/studio/diy/sweeteners.php';
+        require_once __DIR__ . '/../view/studio/diy/sweeteners-selector.php';
     }
     
     /**
-     * Stage 6: Syrups / Flavored Syrups
+     * Stage 5: Syrups / Flavored Syrups
      */
     public function diySyrups()
     {
         $syrups = $this->getSyrups();
-        require_once __DIR__ . '/../view/studio/diy/syrups.php';
+        require_once __DIR__ . '/../view/studio/diy/syrup-selector.php';
     }
     
     /**
-     * Stage 7: Toppings
+     * Stage 6: Toppings
      */
     public function diyToppings()
     {
         $toppings = $this->getToppings();
-        require_once __DIR__ . '/../view/studio/diy/toppings.php';
+        require_once __DIR__ . '/../view/studio/diy/toppings-selector.php';
     }
     
     /**
-     * Stage 8: Pastry
+     * Stage 7: Pastry
      */
     public function diyPastry()
     {
         $pastries = $this->getPastries();
-        require_once __DIR__ . '/../view/studio/diy/pastry.php';
+        require_once __DIR__ . '/../view/studio/diy/pastry-selector.php';
     }
     
     // ========================================
     // PREMADE COFFEE - 3 STAGES
     // ========================================
-    
-    /**
+      /**
      * Start Premade coffee selection
      */
     public function premadeStart()
@@ -118,7 +104,7 @@ class CoffeeStudioController
     public function premadeCupSize()
     {
         $cupSizes = $this->getCupSizes();
-        require_once __DIR__ . '/../view/studio/premade/cup-size.php';
+        require_once __DIR__ . '/../view/studio/premade/cup-selector.php';
     }
     
     /**
@@ -127,7 +113,7 @@ class CoffeeStudioController
     public function premadeCoffee()
     {
         $premadeCoffees = $this->getPremadeCoffees();
-        require_once __DIR__ . '/../view/studio/premade/coffee.php';
+        require_once __DIR__ . '/../view/studio/premade/coffee-selector.php';
     }
     
     /**
@@ -136,7 +122,7 @@ class CoffeeStudioController
     public function premadePastry()
     {
         $pastries = $this->getPastries();
-        require_once __DIR__ . '/../view/studio/premade/pastry.php';
+        require_once __DIR__ . '/../view/studio/premade/pastry-selector.php';
     }
     
     // ========================================

@@ -2,75 +2,138 @@
 
 /**
  * Firebase Authentication Middleware
- * Integrates with Firebase Auth while maintaining server-side security
+ * Handles Firebase token verification and user authentication
  */
 
-require_once 'vendor/autoload.php'; // Firebase SDK
-
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+require_once __DIR__ . '/../config/firebase.php';
 
 class FirebaseAuthMiddleware
-{
-    private $firebaseProjectId;
-    private $firebaseKeys;
-
-    public function __construct()
-    {
-        $this->firebaseProjectId = $_ENV['FIREBASE_PROJECT_ID'] ?? '';
-        $this->firebaseKeys = $this->getFirebasePublicKeys();
-    }
+{    /**
+     * @var array Paths that don't require authentication
+     */
+    private static $publicPaths = [
+        '/',
+        '/home',
+        '/login',
+        '/register',
+        '/signup',
+        '/logout',
+        '/about',
+        '/contact',
+        '/menu',
+        '/community',
+        '/community/product',
+        '/forgot-password',
+        '/reset-password',
+        '/test-simple.php',
+        '/simple-debug.php',
+        '/phpinfo.php'
+    ];
 
     /**
-     * Handle Firebase authentication check
+     * @var array Paths that require admin privileges
      */
-    public function handle()
+    private static $adminPaths = [
+        '/admin',
+        '/admin/dashboard',
+        '/admin/users',
+        '/admin/orders',
+        '/admin/products'
+    ];
+
+    /**
+     * Handle Firebase authentication middleware
+     * 
+     * @param string $path Current request path
+     * @return array|false User data if authenticated, false if authentication failed
+     */
+    public static function handle(string $path)
     {
-        // Start session for additional security features
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+        // Clean the path
+        $path = '/' . trim($path, '/');
+        
+        // Check if path is public (no authentication required)
+        if (self::isPublicPath($path)) {
+            return ['status' => 'public', 'user' => null];
         }
 
-        // Get Firebase ID token
-        $idToken = $this->getFirebaseIdToken();
+        // Check if Firebase is configured
+        if (!FirebaseConfig::isConfigured()) {
+            error_log("Firebase not configured, but protected route accessed: " . $path);
+            return ['status' => 'error', 'message' => 'Authentication service not configured'];
+        }
 
+        // Try to get Firebase ID token from various sources
+        $idToken = self::getIdTokenFromRequest();
+        
         if (!$idToken) {
-            $this->redirectToLogin('Authentication required');
+            // No token provided, redirect to login
+            return ['status' => 'unauthorized', 'message' => 'Authentication required'];
         }
 
-        // Verify Firebase token
-        $decodedToken = $this->verifyFirebaseToken($idToken);
-
-        if (!$decodedToken) {
-            $this->redirectToLogin('Invalid authentication token');
+        // Verify the Firebase ID token
+        $userData = FirebaseConfig::verifyIdToken($idToken);
+        
+        if (!$userData) {
+            // Invalid token, redirect to login
+            return ['status' => 'unauthorized', 'message' => 'Invalid authentication token'];
         }
 
-        // Store user info in session for this request
-        $this->storeUserSession($decodedToken);
+        // Check if user account is disabled
+        if ($userData['disabled']) {
+            return ['status' => 'forbidden', 'message' => 'Account has been disabled'];
+        }
 
-        // Additional security checks
-        $this->performSecurityChecks($decodedToken);
+        // Check email verification if required
+        $requireEmailVerification = $_ENV['REQUIRE_EMAIL_VERIFICATION'] ?? 'false';
+        if ($requireEmailVerification === 'true' && !$userData['emailVerified']) {
+            return ['status' => 'unauthorized', 'message' => 'Email verification required'];
+        }
+
+        // Check admin access for admin paths
+        if (self::isAdminPath($path)) {
+            $isAdmin = self::isUserAdmin($userData);
+            if (!$isAdmin) {
+                return ['status' => 'forbidden', 'message' => 'Admin access required'];
+            }
+        }
+
+        // Store user data in session for easy access
+        self::storeUserSession($userData);
+
+        return ['status' => 'authenticated', 'user' => $userData];
     }
 
     /**
      * Get Firebase ID token from request
+     * Checks Authorization header, cookies, and POST data
+     * 
+     * @return string|null The ID token or null if not found
      */
-    private function getFirebaseIdToken()
+    private static function getIdTokenFromRequest(): ?string
     {
-        // Check Authorization header
+        // Check Authorization header (Bearer token)
         $headers = getallheaders();
         if (isset($headers['Authorization'])) {
-            if (preg_match('/Bearer\s+(.*)$/i', $headers['Authorization'], $matches)) {
+            $authHeader = $headers['Authorization'];
+            if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
                 return $matches[1];
             }
         }
 
-        // Check POST data (for form submissions)
-        if (isset($_POST['firebase_token'])) {
-            return $_POST['firebase_token'];
+        // Check for token in cookies
+        if (isset($_COOKIE['firebase_token'])) {
+            return $_COOKIE['firebase_token'];
         }
 
-        // Check session (fallback)
+        // Check for token in POST data
+        if (isset($_POST['firebase_token'])) {
+            return $_POST['firebase_token'];
+        }        // Check for token in session (fallback)
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (isset($_SESSION['firebase_token'])) {
             return $_SESSION['firebase_token'];
         }
@@ -79,217 +142,226 @@ class FirebaseAuthMiddleware
     }
 
     /**
-     * Verify Firebase ID token
+     * Check if path is public (doesn't require authentication)
+     * 
+     * @param string $path The request path
+     * @return bool True if public, false if protected
      */
-    private function verifyFirebaseToken($idToken)
+    private static function isPublicPath(string $path): bool
     {
-        try {
-            // Decode without verification first to get the kid
-            $header = json_decode(base64_decode(str_replace('_', '/', str_replace('-', '+', explode('.', $idToken)[0]))), true);
-            
-            if (!isset($header['kid']) || !isset($this->firebaseKeys[$header['kid']])) {
-                return false;
-            }
-
-            $publicKey = $this->firebaseKeys[$header['kid']];
-            
-            // Verify the token
-            $decoded = JWT::decode($idToken, new Key($publicKey, 'RS256'));
-
-            // Additional validation
-            if ($decoded->aud !== $this->firebaseProjectId) {
-                return false;
-            }
-
-            if ($decoded->iss !== "https://securetoken.google.com/{$this->firebaseProjectId}") {
-                return false;
-            }
-
-            if ($decoded->exp < time()) {
-                return false;
-            }
-
-            return $decoded;
-
-        } catch (Exception $e) {
-            error_log('Firebase token verification failed: ' . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Get Firebase public keys for token verification
-     */
-    private function getFirebasePublicKeys()
-    {
-        $cacheFile = __DIR__ . '/../../cache/firebase_keys.json';
-        
-        // Check cache first
-        if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < 3600) {
-            return json_decode(file_get_contents($cacheFile), true);
+        // Exact matches
+        if (in_array($path, self::$publicPaths)) {
+            return true;
         }
 
-        // Fetch fresh keys
-        try {
-            $context = stream_context_create([
-                'http' => [
-                    'timeout' => 10,
-                    'user_agent' => 'Costobrew/1.0'
-                ]
-            ]);
-
-            $response = file_get_contents(
-                'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com',
-                false,
-                $context
-            );
-
-            if ($response) {
-                $keys = json_decode($response, true);
-                
-                // Cache the keys
-                if (!is_dir(dirname($cacheFile))) {
-                    mkdir(dirname($cacheFile), 0755, true);
-                }
-                file_put_contents($cacheFile, $response);
-                
-                return $keys;
-            }
-        } catch (Exception $e) {
-            error_log('Failed to fetch Firebase keys: ' . $e->getMessage());
-        }
-
-        return [];
-    }
-
-    /**
-     * Store user info in session for this request
-     */
-    private function storeUserSession($decodedToken)
-    {
-        $_SESSION['firebase_user'] = [
-            'uid' => $decodedToken->sub,
-            'email' => $decodedToken->email ?? null,
-            'email_verified' => $decodedToken->email_verified ?? false,
-            'name' => $decodedToken->name ?? null,
-            'picture' => $decodedToken->picture ?? null,
-            'auth_time' => $decodedToken->auth_time,
-            'token_issued_at' => $decodedToken->iat
+        // Pattern matches for dynamic routes
+        $publicPatterns = [
+            '/^\/community\/product\/\d+$/',  // Community product pages
+            '/^\/api\/public\/.*$/',          // Public API endpoints
+            '/^\/src\/.*$/',                  // Static assets
+            '/^\/assets\/.*$/',               // Static assets
+            '/^\/css\/.*$/',                  // CSS files
+            '/^\/js\/.*$/',                   // JavaScript files
+            '/^\/images\/.*$/',               // Images
         ];
 
-        $_SESSION['user_id'] = $decodedToken->sub; // For compatibility
-        $_SESSION['last_activity'] = time();
-    }
-
-    /**
-     * Perform additional security checks
-     */
-    private function performSecurityChecks($decodedToken)
-    {
-        // Check if email is verified (optional requirement)
-        if ($_ENV['REQUIRE_EMAIL_VERIFICATION'] === 'true') {
-            if (!($decodedToken->email_verified ?? false)) {
-                $this->redirectToEmailVerification();
+        foreach ($publicPatterns as $pattern) {
+            if (preg_match($pattern, $path)) {
+                return true;
             }
         }
 
-        // Check token age (additional security)
-        $maxTokenAge = $_ENV['MAX_TOKEN_AGE'] ?? 3600; // 1 hour
-        if ((time() - $decodedToken->iat) > $maxTokenAge) {
-            $this->redirectToLogin('Please refresh your authentication');
-        }
-
-        // Rate limiting per user
-        $this->checkUserRateLimit($decodedToken->sub);
+        return false;
     }
 
     /**
-     * Check rate limiting per user
+     * Check if path requires admin privileges
+     * 
+     * @param string $path The request path
+     * @return bool True if admin path, false otherwise
      */
-    private function checkUserRateLimit($userId)
+    private static function isAdminPath(string $path): bool
     {
-        $key = "user_rate_limit:{$userId}";
-        $maxRequests = $_ENV['USER_RATE_LIMIT'] ?? 100;
-        $windowMinutes = 5;
-
-        if (!isset($_SESSION[$key])) {
-            $_SESSION[$key] = ['count' => 0, 'reset_time' => time() + ($windowMinutes * 60)];
+        foreach (self::$adminPaths as $adminPath) {
+            if (strpos($path, $adminPath) === 0) {
+                return true;
+            }
         }
 
-        $rateData = $_SESSION[$key];
+        return false;
+    }
 
-        if (time() > $rateData['reset_time']) {
-            $_SESSION[$key] = ['count' => 1, 'reset_time' => time() + ($windowMinutes * 60)];
-        } else {
-            $_SESSION[$key]['count']++;
+    /**
+     * Check if user has admin privileges
+     * 
+     * @param array $userData User data from Firebase
+     * @return bool True if user is admin, false otherwise
+     */
+    private static function isUserAdmin(array $userData): bool
+    {
+        // Check custom claims for admin role
+        if (isset($userData['customClaims']['admin']) && $userData['customClaims']['admin'] === true) {
+            return true;
+        }
+
+        if (isset($userData['customClaims']['role']) && $userData['customClaims']['role'] === 'admin') {
+            return true;
+        }
+
+        // Check specific admin emails (fallback)
+        $adminEmails = [
+            'admin@costobrew.com',
+            'owner@costobrew.com'
+        ];
+
+        return in_array($userData['email'], $adminEmails);
+    }
+
+    /**
+     * Store user data in session
+     * 
+     * @param array $userData User data from Firebase
+     */
+    private static function storeUserSession(array $userData): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION['firebase_user'] = $userData;
+        $_SESSION['user_id'] = $userData['uid'];
+        $_SESSION['user_email'] = $userData['email'];
+        $_SESSION['user_name'] = $userData['displayName'] ?? '';
+        $_SESSION['is_authenticated'] = true;
+        $_SESSION['auth_time'] = time();
+    }
+
+    /**
+     * Get current user from session
+     * 
+     * @return array|null User data or null if not authenticated
+     */
+    public static function getCurrentUser(): ?array
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (isset($_SESSION['firebase_user'])) {
+            // Check session age
+            $maxAge = $_ENV['MAX_TOKEN_AGE'] ?? 3600;
+            $authTime = $_SESSION['auth_time'] ?? 0;
             
-            if ($_SESSION[$key]['count'] > $maxRequests) {
-                http_response_code(429);
-                die('Rate limit exceeded for user');
+            if ((time() - $authTime) > $maxAge) {
+                // Session expired
+                self::clearUserSession();
+                return null;
             }
-        }
-    }
 
-    /**
-     * Redirect to login
-     */
-    private function redirectToLogin($message = null)
-    {
-        if ($message) {
-            $_SESSION['auth_message'] = $message;
+            return $_SESSION['firebase_user'];
         }
 
-        // For API requests, return JSON
-        if ($this->isApiRequest()) {
-            http_response_code(401);
-            header('Content-Type: application/json');
-            echo json_encode(['error' => 'Authentication required', 'message' => $message]);
-            exit();
-        }
-
-        // For web requests, redirect to login
-        header('Location: ' . url('/login'));
-        exit();
+        return null;
     }
 
     /**
-     * Redirect to email verification
+     * Clear user session
      */
-    private function redirectToEmailVerification()
-    {
-        $_SESSION['auth_message'] = 'Please verify your email address';
-        header('Location: ' . url('/verify-email'));
-        exit();
-    }
-
-    /**
-     * Check if this is an API request
-     */
-    private function isApiRequest()
-    {
-        return strpos($_SERVER['REQUEST_URI'], '/api/') === 0 ||
-               (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false);
-    }
-
-    /**
-     * Get current Firebase user
-     */
-    public static function getUser()
+    public static function clearUserSession(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        return $_SESSION['firebase_user'] ?? null;
+
+        unset($_SESSION['firebase_user']);
+        unset($_SESSION['user_id']);
+        unset($_SESSION['user_email']);
+        unset($_SESSION['user_name']);
+        unset($_SESSION['is_authenticated']);
+        unset($_SESSION['auth_time']);
+        unset($_SESSION['firebase_token']);
+
+        // Clear Firebase token cookie
+        setcookie('firebase_token', '', time() - 3600, '/', '', false, true);
     }
 
     /**
-     * Check if user is authenticated
+     * Check if current user is authenticated
+     * 
+     * @return bool True if authenticated, false otherwise
      */
-    public static function check()
+    public static function isAuthenticated(): bool
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+        return self::getCurrentUser() !== null;
+    }
+
+    /**
+     * Check if current user is admin
+     * 
+     * @return bool True if admin, false otherwise
+     */
+    public static function isAdmin(): bool
+    {
+        $user = self::getCurrentUser();
+        
+        if (!$user) {
+            return false;
         }
-        return isset($_SESSION['firebase_user']);
+
+        return self::isUserAdmin($user);
+    }
+
+    /**
+     * Redirect to login page
+     * 
+     * @param string $returnUrl URL to return to after login
+     */
+    public static function redirectToLogin(string $returnUrl = ''): void
+    {
+        $baseUrl = $_ENV['APP_URL'] ?? 'http://localhost:8000';
+        $loginUrl = $baseUrl . '/login';
+        
+        if (!empty($returnUrl)) {
+            $loginUrl .= '?return=' . urlencode($returnUrl);
+        }
+
+        header('Location: ' . $loginUrl);
+        exit;
+    }
+
+    /**
+     * Handle authentication response
+     * 
+     * @param array $authResult Result from handle() method
+     * @param string $currentPath Current request path
+     */
+    public static function handleAuthResponse(array $authResult, string $currentPath): void
+    {
+        switch ($authResult['status']) {
+            case 'public':
+                // Public route, continue normally
+                break;
+                
+            case 'authenticated':
+                // User is authenticated, continue normally
+                break;
+                
+            case 'unauthorized':
+                // Redirect to login
+                self::redirectToLogin($currentPath);
+                break;
+                
+            case 'forbidden':
+                // Show 403 error
+                http_response_code(403);
+                echo "Access denied: " . ($authResult['message'] ?? 'Insufficient privileges');
+                exit;
+                
+            case 'error':
+                // Show 500 error
+                http_response_code(500);
+                echo "Authentication error: " . ($authResult['message'] ?? 'Unknown error');
+                exit;
+        }
     }
 }

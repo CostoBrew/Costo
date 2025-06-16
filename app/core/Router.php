@@ -197,15 +197,13 @@ class Router
         }
 
         return call_user_func_array([$controller, $methodName], array_values($this->params));
-    }
-
-    /**
+    }    /**
      * Run middleware
      */
     private function runMiddleware($middlewareClass)
     {
         if (is_string($middlewareClass)) {
-            $middlewareFile = __DIR__ . "/app/middleware/{$middlewareClass}.php";
+            $middlewareFile = dirname(__DIR__) . "/middleware/{$middlewareClass}.php";
             
             if (file_exists($middlewareFile)) {
                 require_once $middlewareFile;
@@ -221,17 +219,15 @@ class Router
         } elseif (is_callable($middlewareClass)) {
             call_user_func($middlewareClass);
         }
-    }
-
-    /**
+    }    /**
      * Handle 404 Not Found
      */
     private function handleNotFound()
     {
         http_response_code(404);
         
-        if (file_exists(__DIR__ . '/app/view/errors/404.php')) {
-            require_once __DIR__ . '/app/view/errors/404.php';
+        if (file_exists(dirname(__DIR__) . '/view/errors/404.php')) {
+            require_once dirname(__DIR__) . '/view/errors/404.php';
         } else {
             echo "404 - Page Not Found";
         }

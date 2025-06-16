@@ -41,20 +41,18 @@ class SecurityMiddleware
         
         // Set secure session cookies
         $this->setSecureSessionConfig();
-    }
-
-    /**
+    }    /**
      * Get Content Security Policy
      */
     private function getContentSecurityPolicy()
-    {
-        $policies = [
+    {        $policies = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com",
-            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com",
-            "img-src 'self' data: https:",
-            "font-src 'self' https://cdn.jsdelivr.net",
-            "connect-src 'self'",
+            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com https://www.gstatic.com https://apis.google.com https://accounts.google.com",
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com https://fonts.googleapis.com https://accounts.google.com",
+            "img-src 'self' data: https: https://lh3.googleusercontent.com https://accounts.google.com",
+            "font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com",
+            "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://accounts.google.com https://oauth2.googleapis.com",
+            "frame-src 'self' https://accounts.google.com https://*.firebaseapp.com",
             "frame-ancestors 'none'",
             "base-uri 'self'",
             "form-action 'self'"
@@ -71,9 +69,7 @@ class SecurityMiddleware
         return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
                $_SERVER['SERVER_PORT'] == 443 ||
                (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
-    }
-
-    /**
+    }    /**
      * Set secure session configuration
      */
     private function setSecureSessionConfig()

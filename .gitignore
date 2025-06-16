@@ -3,6 +3,16 @@
 .env.local
 .env.production
 
+# Firebase service account (sensitive)
+config/firebase-service-account.json
+firebase-service-account*.json
+
+# Debug and test files
+debug-*.php
+test-*.php
+*-debug.php
+*-test.php
+
 # Logs
 logs/
 *.log

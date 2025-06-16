@@ -21,16 +21,15 @@
         <p class="lead mb-4">
             Looks like this page took a coffee break and never came back!<br>
             The page you're looking for doesn't exist.
-        </p>
-        <div class="d-flex gap-3 justify-content-center flex-wrap">
+        </p>        <div class="d-flex gap-3 justify-content-center flex-wrap">
             <a href="/" class="btn btn-primary btn-lg">
                 <i class="bi bi-house me-2"></i>Go Home
             </a>
             <a href="/studio" class="btn btn-outline-primary btn-lg">
                 <i class="bi bi-cup me-2"></i>Coffee Studio
             </a>
-            <a href="/community" class="btn btn-outline-secondary btn-lg">
-                <i class="bi bi-people me-2"></i>Community
+            <a href="/menu" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-menu-button-wide me-2"></i>Browse Menu
             </a>
         </div>
         

@@ -2,7 +2,7 @@
 
 /**
  * Costobrew Framework - Secure Entry Point
- * Main router with security features and middleware
+ * Main router with security features and Firebase middleware
  */
 
 // Error reporting based on environment
@@ -11,6 +11,7 @@ ini_set('log_errors', 1);
 
 // Load environment configuration
 require_once 'app/config/database.php';
+require_once 'app/config/firebase.php';
 
 // Initialize environment variables by triggering database config load
 try {
@@ -20,15 +21,20 @@ try {
     error_log('Database connection failed during startup: ' . $e->getMessage());
 }
 
+// Start session early to avoid header issues
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Security headers and session setup
 require_once 'app/core/Router.php';
 require_once 'app/middleware/SecurityMiddleware.php';
 require_once 'app/middleware/CSRFMiddleware.php';
 require_once 'app/middleware/RateLimitMiddleware.php';
+require_once 'app/middleware/FirebaseAuthMiddleware.php';
 
 // Load controllers
 require_once 'app/controller/AuthController.php';
-require_once 'app/controller/CommunityController.php';
 require_once 'app/controller/SettingsController.php';
 require_once 'app/controller/CoffeeStudioController.php';
 require_once 'app/controller/CartController.php';
@@ -45,6 +51,18 @@ $router->middleware([
 ]);
 
 // ===================================
+// AUTHENTICATION HANDLING
+// ===================================
+
+// Get current path for authentication
+$currentPath = $_SERVER['REQUEST_URI'];
+$pathOnly = strtok($currentPath, '?'); // Remove query parameters
+
+// Handle Firebase authentication
+$authResult = FirebaseAuthMiddleware::handle($pathOnly);
+FirebaseAuthMiddleware::handleAuthResponse($authResult, $pathOnly);
+
+// ===================================
 // PUBLIC ROUTES (No Authentication)
 // ===================================
 
@@ -58,21 +76,20 @@ $router->get('/home', function() {
 });
 
 // Authentication routes
-$router->get('/login', function() {
-    require_once 'app/view/auth/login.php';
-});
-
-$router->get('/signup', function() {
-    require_once 'app/view/auth/signup.php';
-});
-
+$router->get('/login', 'AuthController@showLogin');
 $router->post('/login', 'AuthController@login', ['CSRFMiddleware']);
-$router->post('/signup', 'AuthController@signup', ['CSRFMiddleware']);
-$router->post('/logout', 'AuthController@logout', ['CSRFMiddleware']);
 
-// Community Page
-$router->get('/community', 'CommunityController@index');
-$router->get('/community/product/{id}', 'CommunityController@viewProduct');
+$router->get('/signup', 'AuthController@showSignup');
+$router->get('/register', 'AuthController@showSignup'); // Alias for signup
+$router->post('/signup', 'AuthController@signup', ['CSRFMiddleware']);
+$router->post('/register', 'AuthController@signup', ['CSRFMiddleware']); // Alias for signup
+
+$router->post('/logout', 'AuthController@logout');
+$router->get('/logout', 'AuthController@logout'); // Allow GET for header links
+
+// Authentication API routes
+$router->get('/api/auth/check', 'AuthController@checkAuth');
+$router->get('/api/auth/user', 'AuthController@userInfo');
 
 // ===================================
 // PROTECTED ROUTES (Authentication Required)
@@ -92,9 +109,8 @@ $router->post('/settings/notifications', 'SettingsController@updateNotifications
 // Coffee Studio
 $router->get('/studio', 'CoffeeStudioController@index', ['AuthMiddleware']);
 
-// DIY Coffee (8 Stages)
+// DIY Coffee (7 Stages)
 $router->get('/studio/diy', 'CoffeeStudioController@diyStart', ['AuthMiddleware']);
-$router->get('/studio/diy/info', 'CoffeeStudioController@diyInfo', ['AuthMiddleware']);
 $router->get('/studio/diy/cup-size', 'CoffeeStudioController@diyCupSize', ['AuthMiddleware']);
 $router->get('/studio/diy/coffee-beans', 'CoffeeStudioController@diyCoffeeBeans', ['AuthMiddleware']);
 $router->get('/studio/diy/milk-type', 'CoffeeStudioController@diyMilkType', ['AuthMiddleware']);
@@ -264,7 +280,11 @@ function user() {
  * Generate URL
  */
 function url($path) {
-    return rtrim($_ENV['APP_URL'], '/') . '/' . ltrim($path, '/');
+    $baseUrl = $_ENV['APP_URL'] ?? 'http://localhost';
+    // Remove trailing slash from base URL and leading slash from path, then combine
+    $baseUrl = rtrim($baseUrl, '/');
+    $path = ltrim($path, '/');
+    return $baseUrl . '/' . $path;
 }
 
 /**

@@ -6,13 +6,13 @@
  */
 
 class CSRFMiddleware
-{
-    /**
+{    /**
      * Handle CSRF protection
      */
     public function handle()
     {
-        // Start session if not already started
+        // Session should already be started in index.php
+        // But double-check just in case
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -66,13 +66,12 @@ class CSRFMiddleware
         } else {
             die('Security error: Invalid request.');
         }
-    }
-
-    /**
+    }    /**
      * Get CSRF token for forms
      */
     public static function getToken()
     {
+        // Session should already be started in index.php
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
