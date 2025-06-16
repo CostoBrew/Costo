@@ -10,8 +10,7 @@ require_once __DIR__ . '/../config/firebase.php';
 class FirebaseAuthMiddleware
 {    /**
      * @var array Paths that don't require authentication
-     */
-    private static $publicPaths = [
+     */    private static $publicPaths = [
         '/',
         '/home',
         '/login',
@@ -24,8 +23,7 @@ class FirebaseAuthMiddleware
         '/community',
         '/community/product',
         '/forgot-password',
-        '/reset-password',
-        '/test-simple.php',
+        '/reset-password',        '/test-simple.php',
         '/simple-debug.php',
         '/phpinfo.php'
     ];
@@ -46,14 +44,23 @@ class FirebaseAuthMiddleware
      * 
      * @param string $path Current request path
      * @return array|false User data if authenticated, false if authentication failed
-     */
-    public static function handle(string $path)
+     */    public static function handle(string $path)
     {
         // Clean the path
         $path = '/' . trim($path, '/');
+          // Debug logging
+        error_log("FirebaseAuthMiddleware::handle() called for path: " . $path);
         
-        // Check if path is public (no authentication required)
+        // Temporary debug for development
+        if ($_ENV['APP_ENV'] === 'development' || true) {
+            $_SESSION['debug_auth'][] = "Auth check for path: " . $path;
+        }
+          // Check if path is public (no authentication required)
         if (self::isPublicPath($path)) {
+            error_log("Path is public: " . $path);
+            if ($_ENV['APP_ENV'] === 'development' || true) {
+                $_SESSION['debug_auth'][] = "Path is public: " . $path;
+            }
             return ['status' => 'public', 'user' => null];
         }
 
@@ -65,18 +72,29 @@ class FirebaseAuthMiddleware
 
         // Try to get Firebase ID token from various sources
         $idToken = self::getIdTokenFromRequest();
-        
-        if (!$idToken) {
+          if (!$idToken) {
+            error_log("No ID token found for path: " . $path);
+            if ($_ENV['APP_ENV'] === 'development' || true) {
+                $_SESSION['debug_auth'][] = "No ID token found for path: " . $path;
+            }
             // No token provided, redirect to login
             return ['status' => 'unauthorized', 'message' => 'Authentication required'];
         }
 
         // Verify the Firebase ID token
         $userData = FirebaseConfig::verifyIdToken($idToken);
-        
-        if (!$userData) {
+          if (!$userData) {
+            error_log("Invalid token for path: " . $path);
+            if ($_ENV['APP_ENV'] === 'development' || true) {
+                $_SESSION['debug_auth'][] = "Invalid token for path: " . $path;
+            }
             // Invalid token, redirect to login
             return ['status' => 'unauthorized', 'message' => 'Invalid authentication token'];
+        }
+
+        error_log("User authenticated for path: " . $path . " - User: " . $userData['email']);
+        if ($_ENV['APP_ENV'] === 'development' || true) {
+            $_SESSION['debug_auth'][] = "User authenticated for path: " . $path . " - User: " . $userData['email'];
         }
 
         // Check if user account is disabled
@@ -109,9 +127,13 @@ class FirebaseAuthMiddleware
      * Checks Authorization header, cookies, and POST data
      * 
      * @return string|null The ID token or null if not found
-     */
-    private static function getIdTokenFromRequest(): ?string
+     */    private static function getIdTokenFromRequest(): ?string
     {
+        // Start session if needed
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         // Check Authorization header (Bearer token)
         $headers = getallheaders();
         if (isset($headers['Authorization'])) {
@@ -129,11 +151,9 @@ class FirebaseAuthMiddleware
         // Check for token in POST data
         if (isset($_POST['firebase_token'])) {
             return $_POST['firebase_token'];
-        }        // Check for token in session (fallback)
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        }        
         
+        // Check for token in session (fallback)
         if (isset($_SESSION['firebase_token'])) {
             return $_SESSION['firebase_token'];
         }
@@ -315,8 +335,7 @@ class FirebaseAuthMiddleware
      * Redirect to login page
      * 
      * @param string $returnUrl URL to return to after login
-     */
-    public static function redirectToLogin(string $returnUrl = ''): void
+     */    public static function redirectToLogin(string $returnUrl = ''): void
     {
         $baseUrl = $_ENV['APP_URL'] ?? 'http://localhost:8000';
         $loginUrl = $baseUrl . '/login';
@@ -334,8 +353,7 @@ class FirebaseAuthMiddleware
      * 
      * @param array $authResult Result from handle() method
      * @param string $currentPath Current request path
-     */
-    public static function handleAuthResponse(array $authResult, string $currentPath): void
+     */    public static function handleAuthResponse(array $authResult, string $currentPath): void
     {
         switch ($authResult['status']) {
             case 'public':

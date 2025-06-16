@@ -17,16 +17,9 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            Coffee Studio
-                        </a>                        <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="/studio">Overview</a></li>
-                            <li><a class="dropdown-item" href="/studio/premade">Premade Blends</a></li>
-                            <li><a class="dropdown-item" href="/studio/diy">DIY Custom Blends</a></li>
-                        </ul>
                     </li>                    <li class="nav-item">
+                        <a class="nav-link" href="/studio">Coffee Studio</a>
+                    </li><li class="nav-item">
                         <a class="nav-link" href="/#about">About</a>
                     </li>
                     <li class="nav-item">

@@ -11,19 +11,19 @@ class CoffeeStudioController
      */
     public function index()
     {
-        require_once __DIR__ . '/../view/studio/start.php';
+        require_once __DIR__ . '/../view/studio/index.php';
     }
       // ========================================
     // DIY COFFEE - 7 STAGES
     // ========================================
-    
-    /**
-     * Start DIY coffee creation
+      /**
+     * Start DIY coffee creation - New single-page approach
      */
     public function diyStart()
     {
         $this->initializeSession();
-        require_once __DIR__ . '/../view/studio/diy/start.php';    }
+        require_once __DIR__ . '/../view/studio/diy/index.php';
+    }
       /**
      * Stage 1: Cup Size selection
      */
@@ -156,8 +156,7 @@ class CoffeeStudioController
             exit;
         }
     }
-    
-    /**
+      /**
      * Add created coffee to cart
      */
     public function addToCart()
@@ -167,10 +166,45 @@ class CoffeeStudioController
                 session_start();
             }
             
+            // Handle JSON request from new DIY interface
+            $input = file_get_contents('php://input');
+            $data = json_decode($input, true);
+            
+            if ($data && isset($data['type']) && $data['type'] === 'diy_coffee') {
+                $coffeeBuilder = $data['build'];
+                $total = floatval($data['total']);
+                
+                // Create cart item
+                $cartItem = [
+                    'id' => uniqid('diy_'),
+                    'type' => 'diy_coffee',
+                    'name' => 'Custom DIY Coffee',
+                    'build' => $coffeeBuilder,
+                    'price' => $total,
+                    'quantity' => 1,
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+                
+                // Add to session cart
+                if (!isset($_SESSION['cart'])) {
+                    $_SESSION['cart'] = [];
+                }
+                
+                $_SESSION['cart'][] = $cartItem;
+                
+                // Clear the coffee builder session
+                unset($_SESSION['coffee_builder']);
+                
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Coffee added to cart']);
+                exit;
+            }
+            
+            // Fallback for old format
             $coffeeData = $_SESSION['coffee_builder'] ?? [];
             $customName = $_POST['custom_name'] ?? 'Custom Coffee';
             
-            // TODO: Add to cart logic
+            // TODO: Add to cart logic for old format
             
             // Clear the coffee builder session
             unset($_SESSION['coffee_builder']);

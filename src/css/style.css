@@ -178,6 +178,11 @@ button{
     background-size: cover;
     background-repeat: no-repeat;
 }
+.loginbg{
+    background-image: url('/src/assets/bglogin.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
 .form-bg{
     background-color: #EBE6CB;
     border-style: none;
@@ -200,7 +205,11 @@ button{
         color: rgba(0, 0, 0, 0.7);
     }
 }
-
+.global-bg{
+    background-color: #EBE6CB;
+    border-style: none;
+    border-radius: 20px 20px 20px 20px;
+}
 .btn-custom-brown {
     background-color: transparent;
     border-color: #381B1B;
@@ -452,7 +461,78 @@ footer hr {
         gap: 1rem !important;
     }
 }
+.btn.btnc-brown,
+.btnc-brown {
+    background-color: #381B1B !important;
+    color: white !important;
+    border: none !important;
+    border-color: #381B1B !important;
+}
 
+.btn.btnc-brown:hover,
+.btnc-brown:hover {
+    background-color: #2d1515 !important;
+    color: white !important;
+    border-color: #2d1515 !important;
+}
+
+.btn.btnc-brown:focus,
+.btn.btnc-brown:active,
+.btnc-brown:focus,
+.btnc-brown:active {
+    background-color: #381B1B !important;
+    color: white !important;
+    border-color: #381B1B !important;
+    box-shadow: 0 0 0 0.2rem rgba(56, 27, 27, 0.5) !important;
+}
 .fs-custom{
     font-size: 4rem;
 }
+        .login-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .login-image {
+            object-fit: cover;
+            height: 100%;
+            min-height: 500px;
+            border-radius: 0.375rem 0 0 0.375rem;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline-dark:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-form-container {
+            background: white;
+            border-radius: 0 0.375rem 0.375rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .login-image {
+                border-radius: 0.375rem 0.375rem 0 0;
+                min-height: 200px;
+            }
+            
+            .login-form-container {
+                border-radius: 0 0 0.375rem 0.375rem;
+            }
+        }

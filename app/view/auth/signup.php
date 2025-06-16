@@ -18,8 +18,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
 </head>
 <body data-bs-theme="dark" class="d-flex flex-column min-vh-100">
-<?php include __DIR__ . '/../includes/header.php'; ?>
-
 <main class="container my-5 flex-grow-1">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
@@ -120,8 +118,6 @@
         </div>
     </div>
 </main>
-
-<?php include __DIR__ . '/../includes/footer.php'; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

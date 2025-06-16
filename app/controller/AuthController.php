@@ -12,8 +12,7 @@ class AuthController
 {
     /**
      * Display login page
-     */
-    public function showLogin()
+     */    public function showLogin()
     {
         // Check if user is already authenticated
         if (FirebaseAuthMiddleware::isAuthenticated()) {
@@ -24,10 +23,9 @@ class AuthController
 
         // Include the login view
         include __DIR__ . '/../view/auth/login.php';
-    }    /**
+    }/**
      * Handle user login with Firebase token
-     */
-    public function login()
+     */    public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Start output buffering to capture any stray output
@@ -39,9 +37,7 @@ class AuthController
                 'data' => null,
                 'errors' => [],
                 'timestamp' => date('c')
-            ];
-
-            try {
+            ];            try {
                 // Get Firebase ID token from POST data
                 $idToken = $_POST['firebase_token'] ?? '';
                 
@@ -51,9 +47,7 @@ class AuthController
                     http_response_code(400);
                     $this->jsonResponse($response);
                     return;
-                }
-
-                // Verify Firebase token
+                }                // Verify Firebase token
                 $userData = FirebaseConfig::verifyIdToken($idToken);
                 
                 if (!$userData) {
@@ -82,9 +76,7 @@ class AuthController
                     http_response_code(403);
                     $this->jsonResponse($response);
                     return;
-                }
-
-                // Store token in session and cookie
+                }                // Store token in session and cookie
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }
@@ -105,12 +97,12 @@ class AuthController
                     'domain' => '',
                     'secure' => ($_ENV['APP_ENV'] === 'production'),
                     'httponly' => true,
-                    'samesite' => 'Strict'
-                ];
-                  setcookie('firebase_token', $idToken, $cookieOptions);
-
-                // Ensure session is written before response
+                    'samesite' => 'Strict'                ];
+                setcookie('firebase_token', $idToken, $cookieOptions);                // Ensure session is written before response
                 session_write_close();
+
+                // Add delay to ensure session is written
+                usleep(100000); // 100ms delay
 
                 // Success response
                 $response['success'] = true;
@@ -127,8 +119,7 @@ class AuthController
                     'session' => [
                         'expiresAt' => date('c', time() + 3600),
                         'loginTime' => date('c')
-                    ],
-                    'redirect' => $_POST['return_url'] ?? '/'
+                    ],                    'redirect' => $_POST['return_url'] ?? '/'
                 ];
 
                 http_response_code(200);

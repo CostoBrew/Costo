@@ -40,6 +40,8 @@ require_once 'app/controller/CoffeeStudioController.php';
 require_once 'app/controller/CartController.php';
 require_once 'app/controller/CheckoutController.php';
 require_once 'app/controller/OrderController.php';
+require_once 'app/controller/AdminController.php';
+require_once 'app/controller/ApiController.php';
 
 // Initialize router
 $router = new Router();
@@ -109,15 +111,8 @@ $router->post('/settings/notifications', 'SettingsController@updateNotifications
 // Coffee Studio
 $router->get('/studio', 'CoffeeStudioController@index', ['AuthMiddleware']);
 
-// DIY Coffee (7 Stages)
+// DIY Coffee (Single Page Dynamic)
 $router->get('/studio/diy', 'CoffeeStudioController@diyStart', ['AuthMiddleware']);
-$router->get('/studio/diy/cup-size', 'CoffeeStudioController@diyCupSize', ['AuthMiddleware']);
-$router->get('/studio/diy/coffee-beans', 'CoffeeStudioController@diyCoffeeBeans', ['AuthMiddleware']);
-$router->get('/studio/diy/milk-type', 'CoffeeStudioController@diyMilkType', ['AuthMiddleware']);
-$router->get('/studio/diy/sweeteners', 'CoffeeStudioController@diySweeteners', ['AuthMiddleware']);
-$router->get('/studio/diy/syrups', 'CoffeeStudioController@diySyrups', ['AuthMiddleware']);
-$router->get('/studio/diy/toppings', 'CoffeeStudioController@diyToppings', ['AuthMiddleware']);
-$router->get('/studio/diy/pastry', 'CoffeeStudioController@diyPastry', ['AuthMiddleware']);
 
 // Premade Coffee (3 stages)
 $router->get('/studio/premade', 'CoffeeStudioController@premadeStart', ['AuthMiddleware']);
