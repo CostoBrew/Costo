@@ -17,7 +17,9 @@ use Kreait\Firebase\Exception\FirebaseException;
 class FirebaseConfig
 {
     private static $auth = null;
-    private static $factory = null;    /**
+    private static $factory = null;
+
+    /**
      * Initialize Firebase with service account
      */
     private static function initializeFirebase()
@@ -45,7 +47,8 @@ class FirebaseConfig
 
             // Resolve the service account path
             $fullPath = __DIR__ . '/../../' . ltrim($serviceAccountPath, './');
-              try {
+
+            try {
                 if (file_exists($fullPath)) {
                     // For Kreait Firebase SDK v6, use fromValue with file contents
                     $serviceAccountJson = file_get_contents($fullPath);
@@ -53,7 +56,9 @@ class FirebaseConfig
                 } else {
                     // Fallback: try to create service account from environment variables
                     throw new Exception("Firebase service account file not found at: $fullPath");
-                }                self::$factory = (new Factory)
+                }
+
+                self::$factory = (new Factory)
                     ->withServiceAccount($serviceAccount)
                     ->withProjectId($projectId);
 
@@ -84,7 +89,8 @@ class FirebaseConfig
      * 
      * @param string $idToken The Firebase ID token to verify
      * @return array|false User data if token is valid, false otherwise
-     */    public static function verifyIdToken(string $idToken)
+     */
+    public static function verifyIdToken(string $idToken)
     {
         try {
             // For development SSL bypass
