@@ -213,6 +213,101 @@ class CoffeeStudioController
             exit;
         }
     }
+      /**
+     * Direct checkout from studio (bypassing cart)
+     */
+    public function directCheckout()
+    {
+        // Set JSON header early
+        header('Content-Type: application/json');
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
+                
+                // Handle JSON request from studio interface
+                $input = file_get_contents('php://input');
+                $data = json_decode($input, true);
+                
+                if (!$data) {
+                    echo json_encode(['success' => false, 'message' => 'Invalid JSON data']);
+                    exit;
+                }
+                
+                if (!isset($data['type'])) {
+                    echo json_encode(['success' => false, 'message' => 'Missing order type']);
+                    exit;
+                }
+                
+                $total = floatval($data['total'] ?? 0);
+                
+                if ($total <= 0) {
+                    echo json_encode(['success' => false, 'message' => 'Invalid total amount']);
+                    exit;
+                }                // Create order item based on type
+                if ($data['type'] === 'diy_coffee') {
+                    $orderItem = [
+                        'id' => uniqid('diy_'),
+                        'type' => 'diy_coffee',
+                        'item_type' => 'diy', // For checkout view compatibility
+                        'name' => 'Custom DIY Coffee',
+                        'custom_data' => [
+                            'name' => 'Custom DIY Coffee',
+                            'type' => 'diy_coffee'
+                        ],
+                        'build' => $data['build'] ?? [],
+                        'ingredients' => $data['ingredients'] ?? [],
+                        'price' => $total,
+                        'subtotal' => $data['subtotal'] ?? 0,
+                        'deliveryFee' => $data['deliveryFee'] ?? 50,
+                        'vatAmount' => $data['vatAmount'] ?? 0,
+                        'quantity' => 1,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];                } else if ($data['type'] === 'premade_coffee') {
+                    $coffeeName = $data['coffee_name'] ?? 'Premade Coffee';
+                    $orderItem = [
+                        'id' => uniqid('premade_'),
+                        'type' => 'premade_coffee',
+                        'item_type' => 'premade', // For checkout view compatibility
+                        'name' => $coffeeName,
+                        'custom_data' => [
+                            'name' => $coffeeName,
+                            'type' => 'premade_coffee'
+                        ],
+                        'build' => $data['build'] ?? [],
+                        'price' => $total,
+                        'subtotal' => $data['subtotal'] ?? 0,
+                        'deliveryFee' => $data['deliveryFee'] ?? 50,
+                        'vatAmount' => $data['vatAmount'] ?? 0,
+                        'quantity' => 1,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Invalid order type']);
+                    exit;
+                }
+                
+                // Store order item in session for checkout
+                $_SESSION['direct_checkout_item'] = $orderItem;
+                
+                // Clear the coffee builder session
+                unset($_SESSION['coffee_builder']);
+                
+                echo json_encode(['success' => true, 'redirect' => '/checkout']);
+                exit;
+                
+            } catch (Exception $e) {
+                error_log("Direct checkout error: " . $e->getMessage());
+                echo json_encode(['success' => false, 'message' => 'Server error occurred']);
+                exit;
+            }
+        }
+        
+        echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+        exit;
+    }
     
     // ========================================
     // HELPER METHODS
@@ -250,12 +345,29 @@ class CoffeeStudioController
         
         return $total;
     }
-    
-    /**
-     * Get cup sizes with prices
+      /**
+     * Get cup sizes with prices (from database or fallback to hardcoded)
      */
     private function getCupSizes()
     {
+        try {
+            require_once __DIR__ . '/../config/database.php';
+            DatabaseConfig::loadEnvironment();
+            $pdo = DatabaseConfig::getConnection();
+            
+            $sql = "SELECT name, price FROM studio_ingredients WHERE category = 'cup_size' AND is_available = 1 ORDER BY sort_order";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $sizes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($sizes)) {
+                return $sizes;
+            }
+        } catch (Exception $e) {
+            error_log("Database cup sizes retrieval failed: " . $e->getMessage());
+        }
+        
+        // Fallback to hardcoded values
         return [
             ['name' => 'Small (8oz)', 'price' => 0.00],
             ['name' => 'Medium (12oz)', 'price' => 0.50],
@@ -265,10 +377,28 @@ class CoffeeStudioController
     }
     
     /**
-     * Get coffee beans types
+     * Get coffee beans types (from database or fallback to hardcoded)
      */
     private function getCoffeeBeans()
     {
+        try {
+            require_once __DIR__ . '/../config/database.php';
+            DatabaseConfig::loadEnvironment();
+            $pdo = DatabaseConfig::getConnection();
+            
+            $sql = "SELECT name, price FROM studio_ingredients WHERE category = 'coffee_beans' AND is_available = 1 ORDER BY sort_order";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $beans = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($beans)) {
+                return $beans;
+            }
+        } catch (Exception $e) {
+            error_log("Database coffee beans retrieval failed: " . $e->getMessage());
+        }
+        
+        // Fallback to hardcoded values
         return [
             ['name' => 'Arabica', 'price' => 0.00],
             ['name' => 'Robusta', 'price' => 0.25],
@@ -279,10 +409,28 @@ class CoffeeStudioController
     }
     
     /**
-     * Get milk types
+     * Get milk types (from database or fallback to hardcoded)
      */
     private function getMilkTypes()
     {
+        try {
+            require_once __DIR__ . '/../config/database.php';
+            DatabaseConfig::loadEnvironment();
+            $pdo = DatabaseConfig::getConnection();
+            
+            $sql = "SELECT name, price FROM studio_ingredients WHERE category = 'milk_type' AND is_available = 1 ORDER BY sort_order";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $milkTypes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($milkTypes)) {
+                return $milkTypes;
+            }
+        } catch (Exception $e) {
+            error_log("Database milk types retrieval failed: " . $e->getMessage());
+        }
+        
+        // Fallback to hardcoded values
         return [
             ['name' => 'Whole Milk', 'price' => 0.00],
             ['name' => 'Skim Milk', 'price' => 0.00],
@@ -294,10 +442,28 @@ class CoffeeStudioController
     }
     
     /**
-     * Get sweeteners
+     * Get sweeteners (from database or fallback to hardcoded)
      */
     private function getSweeteners()
     {
+        try {
+            require_once __DIR__ . '/../config/database.php';
+            DatabaseConfig::loadEnvironment();
+            $pdo = DatabaseConfig::getConnection();
+            
+            $sql = "SELECT name, price FROM studio_ingredients WHERE category = 'sweeteners' AND is_available = 1 ORDER BY sort_order";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $sweeteners = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($sweeteners)) {
+                return $sweeteners;
+            }
+        } catch (Exception $e) {
+            error_log("Database sweeteners retrieval failed: " . $e->getMessage());
+        }
+        
+        // Fallback to hardcoded values
         return [
             ['name' => 'None', 'price' => 0.00],
             ['name' => 'Sugar', 'price' => 0.00],
@@ -308,10 +474,28 @@ class CoffeeStudioController
     }
     
     /**
-     * Get syrups
+     * Get syrups (from database or fallback to hardcoded)
      */
     private function getSyrups()
     {
+        try {
+            require_once __DIR__ . '/../config/database.php';
+            DatabaseConfig::loadEnvironment();
+            $pdo = DatabaseConfig::getConnection();
+            
+            $sql = "SELECT name, price FROM studio_ingredients WHERE category = 'syrups' AND is_available = 1 ORDER BY sort_order";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $syrups = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($syrups)) {
+                return $syrups;
+            }
+        } catch (Exception $e) {
+            error_log("Database syrups retrieval failed: " . $e->getMessage());
+        }
+        
+        // Fallback to hardcoded values
         return [
             ['name' => 'None', 'price' => 0.00],
             ['name' => 'Vanilla', 'price' => 0.50],
@@ -323,10 +507,28 @@ class CoffeeStudioController
     }
     
     /**
-     * Get toppings
+     * Get toppings (from database or fallback to hardcoded)
      */
     private function getToppings()
     {
+        try {
+            require_once __DIR__ . '/../config/database.php';
+            DatabaseConfig::loadEnvironment();
+            $pdo = DatabaseConfig::getConnection();
+            
+            $sql = "SELECT name, price FROM studio_ingredients WHERE category = 'toppings' AND is_available = 1 ORDER BY sort_order";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $toppings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($toppings)) {
+                return $toppings;
+            }
+        } catch (Exception $e) {
+            error_log("Database toppings retrieval failed: " . $e->getMessage());
+        }
+        
+        // Fallback to hardcoded values
         return [
             ['name' => 'None', 'price' => 0.00],
             ['name' => 'Whipped Cream', 'price' => 0.50],
@@ -338,10 +540,28 @@ class CoffeeStudioController
     }
     
     /**
-     * Get pastries
+     * Get pastries (from database or fallback to hardcoded)
      */
     private function getPastries()
     {
+        try {
+            require_once __DIR__ . '/../config/database.php';
+            DatabaseConfig::loadEnvironment();
+            $pdo = DatabaseConfig::getConnection();
+            
+            $sql = "SELECT name, price FROM studio_ingredients WHERE category = 'pastries' AND is_available = 1 ORDER BY sort_order";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $pastries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($pastries)) {
+                return $pastries;
+            }
+        } catch (Exception $e) {
+            error_log("Database pastries retrieval failed: " . $e->getMessage());
+        }
+        
+        // Fallback to hardcoded values
         return [
             ['name' => 'None', 'price' => 0.00],
             ['name' => 'Croissant', 'price' => 2.50],
@@ -353,10 +573,28 @@ class CoffeeStudioController
     }
     
     /**
-     * Get premade coffees
+     * Get premade coffees (from database or fallback to hardcoded)
      */
     private function getPremadeCoffees()
     {
+        try {
+            require_once __DIR__ . '/../config/database.php';
+            DatabaseConfig::loadEnvironment();
+            $pdo = DatabaseConfig::getConnection();
+            
+            $sql = "SELECT name, price FROM studio_ingredients WHERE category = 'premade_coffee' AND is_available = 1 ORDER BY sort_order";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $premadeCoffees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($premadeCoffees)) {
+                return $premadeCoffees;
+            }
+        } catch (Exception $e) {
+            error_log("Database premade coffees retrieval failed: " . $e->getMessage());
+        }
+        
+        // Fallback to hardcoded values
         return [
             ['name' => 'Americano', 'price' => 3.00],
             ['name' => 'Latte', 'price' => 4.50],

@@ -40,8 +40,7 @@ class CSRFMiddleware
 
     /**
      * Validate CSRF token
-     */
-    private function validateCSRFToken()
+     */    private function validateCSRFToken()
     {
         $token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
 
@@ -56,8 +55,7 @@ class CSRFMiddleware
 
     /**
      * Handle CSRF failure
-     */
-    private function csrfFailure()
+     */    private function csrfFailure()
     {
         http_response_code(419);
         
@@ -66,7 +64,7 @@ class CSRFMiddleware
         } else {
             die('Security error: Invalid request.');
         }
-    }    /**
+    }/**
      * Get CSRF token for forms
      */
     public static function getToken()

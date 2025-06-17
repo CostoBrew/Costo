@@ -16,25 +16,26 @@
 <body data-bs-theme="dark" class="d-flex flex-column min-vh-100 text-dark mainbg">
 <?php include __DIR__ . '/../includes/header.php'; ?>
 
-<div class="container py-4">
-    <div class="pt-5 mt-5"></div>
-    <div class="row justify-content-center">
-        <div class="col-xl-8 col-lg-10">
-            <div class="form-bg p-4 rounded-4 shadow-lg">
-                <div class="text-dark mb-3">
-                    <h1 class="font-garamond size-1 mb-2">
-                        <i class="bi bi-credit-card me-3"></i>Checkout
-                    </h1>
-                    <p class="lead mb-0">Review your order and confirm delivery details</p>
-                </div>            <!-- Order Summary Section -->
-            <div class="order-summary-section mb-4">
-                <h3 class="font-garamond mb-3 text-dark">Order Summary</h3>
+<div class="container-fluid px-5 pt-5 main-content">
+    <div class="pt-5 pb-3"></div>
+    <div class="row w-100">
+        <div class="col-lg-8 form-bg p-5 rounded-4 me-lg-3">
+            <div class="text-dark mb-4">
+                <h1 class="font-garamond size-1 mb-3">
+                    <i class="bi bi-credit-card me-3"></i>Checkout
+                </h1>
+                <p class="lead">Review your order and confirm delivery details</p>
+            </div>
+
+            <!-- Order Summary Section -->
+            <div class="order-summary-section mb-5">
+                <h3 class="font-garamond mb-4 text-dark">Order Summary</h3>
                 
                 <?php if (empty($cartItems)): ?>
-                    <div class="empty-cart-state text-center py-4">
-                        <i class="bi bi-cup-hot" style="font-size: 3rem; color: #8B4513; opacity: 0.5;"></i>
+                    <div class="empty-cart-state text-center py-5">
+                        <i class="bi bi-cup-hot" style="font-size: 4rem; color: #8B4513; opacity: 0.5;"></i>
                         <h4 class="mt-3 text-dark">No items in your order</h4>
-                        <p class="text-muted mb-3">Start building your perfect coffee experience</p>
+                        <p class="text-muted mb-4">Start building your perfect coffee experience</p>
                         <div class="d-flex justify-content-center gap-3">
                             <a href="/menu" class="btn btn-coffee rounded-pill">Browse Menu</a>
                             <a href="/studio" class="btn btn-outline-dark rounded-pill">Coffee Studio</a>
@@ -66,50 +67,32 @@
                                     $itemType = ucfirst($type);
                                 }
                             }
-                            ?>                            <div class="checkout-item-card bg-white rounded-4 p-3 mb-2 shadow-sm">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="item-details flex-grow-1">
+                            ?>
+                            <div class="checkout-item-card bg-white rounded-4 p-4 mb-3 shadow-sm">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="item-details">
                                         <h5 class="text-dark mb-2"><?= htmlspecialchars($itemName) ?></h5>
-                                        
-                                        <?php if (isset($item['ingredients']) && !empty($item['ingredients'])): ?>
-                                            <div class="ingredients-list mb-3">
-                                                <h6 class="text-muted mb-2">Your Selections:</h6>
-                                                <div class="ingredient-badges">
-                                                    <?php foreach ($item['ingredients'] as $ingredient): ?>
-                                                        <span class="badge bg-light text-dark me-2 mb-1">
-                                                            <strong><?= ucfirst($ingredient['category']) ?>:</strong> 
-                                                            <?= htmlspecialchars($ingredient['name']) ?>
-                                                            <?php if ($ingredient['price'] > 0): ?>
-                                                                (+₱<?= number_format($ingredient['price'], 2) ?>)
-                                                            <?php endif; ?>
-                                                        </span>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                            </div>
-                                        <?php endif; ?>
-                                        
                                         <div class="d-flex align-items-center gap-3">
                                             <span class="badge bg-coffee text-white px-3 py-2"><?= htmlspecialchars($itemType) ?> Coffee</span>
                                             <span class="text-muted">Qty: <?= intval($item['quantity'] ?? 1) ?></span>
                                         </div>
                                     </div>
-                                    <div class="item-price ms-3">
+                                    <div class="item-price">
                                         <h4 class="text-coffee mb-0">₱<?= number_format(floatval($item['price'] ?? 0) * intval($item['quantity'] ?? 1), 2) ?></h4>
                                     </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                    </div>                    <!-- Order Totals -->
-                    <div class="order-totals bg-white rounded-4 p-3 mt-3">
+                    </div>
+
+                    <!-- Order Totals -->
+                    <div class="order-totals bg-white rounded-4 p-4 mt-4">
                         <div class="d-flex justify-content-between mb-3">
                             <span class="text-dark">Subtotal:</span>
                             <span class="text-dark">₱<?= number_format($cartTotal ?? 0, 2) ?></span>
-                        </div>                        <div class="d-flex justify-content-between mb-3">
-                            <span class="text-dark">Delivery Fee:</span>
-                            <span class="text-dark">₱<?= number_format($deliveryFee ?? 50, 2) ?></span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            <span class="text-dark">VAT (12%):</span>
+                            <span class="text-dark">Tax (12%):</span>
                             <span class="text-dark">₱<?= number_format($taxes ?? 0, 2) ?></span>
                         </div>
                         <div class="d-flex justify-content-between border-top pt-3">
@@ -120,60 +103,52 @@
                 <?php endif; ?>
             </div>
 
-            <!-- Customer Information Form -->            <?php if (!empty($cartItems)): ?>
+            <!-- Customer Information Form -->
+            <?php if (!empty($cartItems)): ?>
                 <form action="/checkout/process" method="POST" class="checkout-form">
-                    <?php 
-                    // Generate CSRF token
-                    if (session_status() === PHP_SESSION_NONE) {
-                        session_start();
-                    }
-                    if (!isset($_SESSION['csrf_token'])) {
-                        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-                    }
-                    ?>
-                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                    
                     <div class="customer-info-section">
-                        <h3 class="font-garamond mb-3 text-dark">Delivery Information</h3>
-                        <p class="text-muted mb-3">
+                        <h3 class="font-garamond mb-4 text-dark">Delivery Information</h3>
+                        <p class="text-muted mb-4">
                             <i class="bi bi-info-circle me-2"></i>
                             Currently using guest checkout. Customer information from user settings will be available after implementation.
                         </p>
                         
-                        <div class="row g-3">
+                        <div class="row g-4">
                             <div class="col-md-6">
                                 <label for="customer_name" class="form-label text-dark fw-semibold">Full Name *</label>
-                                <input type="text" class="form-control rounded-3 border-2" 
+                                <input type="text" class="form-control form-control-lg rounded-3 border-2" 
                                        id="customer_name" name="customer_name" required 
                                        placeholder="Enter your full name">
                             </div>
                             <div class="col-md-6">
                                 <label for="customer_phone" class="form-label text-dark fw-semibold">Phone Number *</label>
-                                <input type="tel" class="form-control rounded-3 border-2" 
+                                <input type="tel" class="form-control form-control-lg rounded-3 border-2" 
                                        id="customer_phone" name="customer_phone" required 
                                        placeholder="+63 9XX XXX XXXX">
                             </div>
                             <div class="col-12">
                                 <label for="customer_email" class="form-label text-dark fw-semibold">Email Address *</label>
-                                <input type="email" class="form-control rounded-3 border-2" 
+                                <input type="email" class="form-control form-control-lg rounded-3 border-2" 
                                        id="customer_email" name="customer_email" required 
                                        placeholder="your.email@example.com">
                             </div>
                             <div class="col-12">
                                 <label for="delivery_address" class="form-label text-dark fw-semibold">Delivery Address *</label>
-                                <textarea class="form-control rounded-3 border-2" 
-                                          id="delivery_address" name="delivery_address" rows="2" required 
+                                <textarea class="form-control form-control-lg rounded-3 border-2" 
+                                          id="delivery_address" name="delivery_address" rows="3" required 
                                           placeholder="Enter complete delivery address with landmarks"></textarea>
                             </div>
                             <div class="col-12">
                                 <label for="delivery_notes" class="form-label text-dark fw-semibold">Special Instructions</label>
-                                <textarea class="form-control rounded-3 border-2" 
+                                <textarea class="form-control form-control-lg rounded-3 border-2" 
                                           id="delivery_notes" name="delivery_notes" rows="2" 
                                           placeholder="Any special delivery instructions (optional)"></textarea>
                             </div>
                         </div>
-                    </div>                    <!-- Order Summary -->
-                    <div class="order-summary-footer mt-4 pt-3 border-top">
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="order-summary-footer mt-5 pt-4 border-top">
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                             <div class="order-info">
                                 <p class="mb-1 text-dark">
@@ -200,15 +175,16 @@
                                 </button>
                             </div>
                         </div>
-                    </div>                    <?php if (isset($errorMessage)): ?>
-                        <div class="alert alert-danger rounded-4 mt-3">
+                    </div>
+
+                    <?php if (isset($errorMessage)): ?>
+                        <div class="alert alert-danger rounded-4 mt-4">
                             <i class="bi bi-exclamation-triangle me-2"></i>
                             <?= htmlspecialchars($errorMessage) ?>
                         </div>
                     <?php endif; ?>
                 </form>
             <?php endif; ?>
-            </div>
         </div>
     </div>
 </div>

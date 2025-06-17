@@ -77,7 +77,7 @@
                     <div class="row row-cols-4 g-3 mt-3 justify-content-center">
                         <!-- Small Cup -->
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="small" data-price="4.50">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="small" data-price="95.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-hot" style="font-size: 2.5rem; color: #8B4513;"></i>
@@ -89,7 +89,7 @@
                         </div>
                         <!-- Medium Cup -->
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="medium" data-price="5.50">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="medium" data-price="115.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-hot" style="font-size: 2.5rem; color: #8B4513;"></i>
@@ -101,7 +101,7 @@
                         </div>
                         <!-- Large Cup -->
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="large" data-price="6.50">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="large" data-price="135.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-hot" style="font-size: 2.5rem; color: #8B4513;"></i>
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="colombian-supreme" data-price="1.00">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="colombian-supreme" data-price="25.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #D2691E;"></i>
@@ -140,7 +140,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="dark-espresso" data-price="0.75">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="dark-espresso" data-price="20.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #654321;"></i>
@@ -151,7 +151,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="french-vanilla" data-price="1.25">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="french-vanilla" data-price="30.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #DEB887;"></i>
@@ -162,7 +162,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="hazelnut-cream" data-price="1.25">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="hazelnut-cream" data-price="30.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #CD853F;"></i>
@@ -201,7 +201,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="croissant" data-price="2.50">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="croissant" data-price="85.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-egg-fried" style="font-size: 2.5rem; color: #DAA520;"></i>
@@ -212,7 +212,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="blueberry-muffin" data-price="3.00">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="blueberry-muffin" data-price="85.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-circle-fill" style="font-size: 2.5rem; color: #4169E1;"></i>
@@ -223,7 +223,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="chocolate-cookie" data-price="2.25">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="chocolate-cookie" data-price="45.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-circle-fill" style="font-size: 2.5rem; color: #8B4513;"></i>
@@ -234,7 +234,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="danish" data-price="3.25">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="danish" data-price="65.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-heart-fill" style="font-size: 2.5rem; color: #FF69B4;"></i>
@@ -245,7 +245,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="bagel" data-price="2.75">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="bagel" data-price="55.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-circle" style="font-size: 2.5rem; color: #D2B48C;"></i>
@@ -256,7 +256,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="cinnamon-roll" data-price="3.50">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="cinnamon-roll" data-price="70.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-arrow-clockwise" style="font-size: 2.5rem; color: #CD853F;"></i>
@@ -267,7 +267,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="donut" data-price="1.95">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="donut" data-price="39.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-circle" style="font-size: 2.5rem; color: #FF6347;"></i>
@@ -324,26 +324,23 @@
                             </li>
                         </ul>
                     </div>
-                </div>
-
-                <div class="mt-auto">
+                </div>                <div class="mt-auto">
                     <div class="mt-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="text-dark">Delivery fee:</span>
-                            <span class="text-dark">30 php</span>
+                            <span class="text-dark" id="deliveryFeeDisplay">₱50.00</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-dark">VAT:</span>
-                            <span class="text-dark">0.09 php</span>
+                            <span class="text-dark">VAT (12%):</span>
+                            <span class="text-dark" id="vatDisplay">₱0.00</span>
                         </div>
                         <hr class="my-2">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="fw-semibold text-dark mb-0">Total:</h5>
-                            <h5 class="fw-semibold text-dark mb-0">100.00 Php</h5>
+                            <h5 class="fw-semibold text-dark mb-0" id="totalDisplay">₱50.00</h5>
                         </div>
-                    </div>
-                    <div class="mt-3">
-                        <button class="btn btn-custom-brown w-100 rounded rounded-pill">Checkout</button>
+                    </div><div class="mt-3">
+                        <button class="btn btn-custom-brown w-100 rounded rounded-pill" id="checkoutBtn">Checkout</button>
                         <p class="text-dark mt-2 text-center">By proceeding, you agree to our <a href="#"
                                 class="text-primary">Terms of Service</a>.</p>
                     </div>
@@ -369,21 +366,30 @@
             coffee: null,
             pastry: null
         };
-        
-        // Initialize page
+          // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
             updateStageTitle();
             updateNavigationButtons();
             updateOrderSummary();
+            updateOrderNumber();
         });
-          function setupEventListeners() {
+        
+        function updateOrderNumber() {
+            // Generate a realistic order number
+            const timestamp = Date.now();
+            const orderNo = 'ORD' + timestamp.toString().slice(-8);
+            document.querySelector('.d-flex.flex-wrap.align-items-center.justify-content-between p').textContent = orderNo;
+        }function setupEventListeners() {
             // Previous/Next buttons
             document.querySelector('.btn-circle:first-child').addEventListener('click', previousStage);
             document.querySelector('.btn-circle:last-child').addEventListener('click', nextStage);
             
             // Reset button
             document.getElementById('resetBtn').addEventListener('click', resetOrder);
+            
+            // Checkout button
+            document.getElementById('checkoutBtn').addEventListener('click', proceedToCheckout);
             
             // Ingredient cards
             document.querySelectorAll('.ingredient-card').forEach(card => {
@@ -492,7 +498,7 @@
                     orderContainer.innerHTML += `
                         <li class="list-group-item d-flex justify-content-between align-items-center bg-white text-dark">
                             <span>${item.name}</span>
-                            <span class="badge bg-primary rounded-pill">${item.price.toFixed(2)} php</span>
+                            <span class="badge bg-primary rounded-pill">₱${item.price.toFixed(2)}</span>
                         </li>
                     `;
                 }
@@ -506,13 +512,54 @@
                     </li>
                 `;
             }
+              // Update total
+            const deliveryFee = 50; // ₱50 delivery fee
+            const vatRate = 0.12; // 12% VAT for Philippines
+            const subtotalWithDelivery = total + deliveryFee;
+            const vat = subtotalWithDelivery * vatRate;
+            const finalTotal = subtotalWithDelivery + vat;
             
-            // Update total
-            const deliveryFee = 30;
-            const vat = 0.09;
-            const finalTotal = total + deliveryFee + vat;
+            // Debug logging - more detailed
+            console.log('=== Premade Coffee Studio Calculation Debug ===');
+            console.log('Items selected:');
+            Object.entries(coffeeOrder).forEach(([key, item]) => {
+                if (item && item.value !== 'none') {
+                    console.log(`  ${key}: ${item.name} = ₱${item.price.toFixed(2)}`);
+                }
+            });
+            console.log('Subtotal (items only):', total.toFixed(2));
+            console.log('Delivery Fee:', deliveryFee.toFixed(2));
+            console.log('Subtotal + Delivery:', subtotalWithDelivery.toFixed(2));
+            console.log('VAT Rate:', (vatRate * 100) + '%');
+            console.log('VAT Amount (12% of ₱' + subtotalWithDelivery.toFixed(2) + '):', vat.toFixed(2));
+            console.log('Final Total:', finalTotal.toFixed(2));
+            console.log('===============================================');
             
-            document.querySelector('.d-flex.justify-content-between.align-items-center:last-child h5:last-child').textContent = `${finalTotal.toFixed(2)} Php`;
+            // Update delivery fee display
+            const deliveryFeeElement = document.getElementById('deliveryFeeDisplay');
+            if (deliveryFeeElement) {
+                deliveryFeeElement.textContent = `₱${deliveryFee.toFixed(2)}`;
+                console.log('✅ Updated delivery fee display to:', deliveryFeeElement.textContent);
+            } else {
+                console.log('❌ Could not find delivery fee element');
+            }
+            
+            // Update VAT display  
+            const vatElement = document.getElementById('vatDisplay');
+            if (vatElement) {
+                vatElement.textContent = `₱${vat.toFixed(2)}`;
+                console.log('✅ Updated VAT display to:', vatElement.textContent);
+            } else {
+                console.log('❌ Could not find VAT element');
+            }
+              // Update final total display
+            const totalElement = document.getElementById('totalDisplay');
+            if (totalElement) {
+                totalElement.textContent = `₱${finalTotal.toFixed(2)}`;
+                console.log('✅ Updated final total display to:', totalElement.textContent);
+            } else {
+                console.log('❌ Could not find total element');
+            }
         }
         
         function resetOrder() {
@@ -529,9 +576,105 @@
             });
             
             // Reset to first stage
-            currentStage = 0;
-            updateStage();
+            currentStage = 0;            updateStage();
             updateOrderSummary();
+        }        function proceedToCheckout() {
+            // Check if at least cup and coffee are selected (only required fields for premade)
+            if (!coffeeOrder.cup) {
+                alert('Please select a cup size before checkout.');
+                return;
+            }
+            
+            if (!coffeeOrder.coffee) {
+                alert('Please select a coffee before checkout.');
+                return;
+            }
+            
+            // Calculate total (only count items that are selected)
+            let total = 0;
+            Object.values(coffeeOrder).forEach(item => {
+                if (item && item.price) {
+                    total += item.price;
+                }
+            });
+            
+            // Ensure minimum total
+            if (total <= 0) {
+                alert('Please select at least a cup size and coffee.');
+                return;
+            }
+            
+            // Calculate totals for checkout data
+            let subtotal = 0;
+            Object.values(coffeeOrder).forEach(item => {
+                if (item && item.price) {
+                    subtotal += item.price;
+                }
+            });
+            
+            const deliveryFee = 50;
+            const subtotalWithDelivery = subtotal + deliveryFee;
+            const vatAmount = subtotalWithDelivery * 0.12;
+            const finalTotal = subtotalWithDelivery + vatAmount;
+            
+            // Generate order number (matches DIY format)
+            const date = new Date();
+            const dateStr = date.getFullYear().toString() + 
+                           (date.getMonth() + 1).toString().padStart(2, '0') + 
+                           date.getDate().toString().padStart(2, '0');
+            const orderNumber = 'CB' + dateStr + Math.floor(Math.random() * 9000 + 1000);
+            
+            console.log('=== Premade Checkout Data Debug ===');
+            console.log('Order Number:', orderNumber);
+            console.log('Items subtotal:', subtotal.toFixed(2));
+            console.log('Delivery fee:', deliveryFee.toFixed(2));
+            console.log('VAT amount:', vatAmount.toFixed(2));
+            console.log('Final total:', finalTotal.toFixed(2));
+            console.log('==================================');
+            
+            // Prepare data for checkout
+            const checkoutData = {
+                type: 'premade_coffee',
+                coffee_name: coffeeOrder.coffee ? coffeeOrder.coffee.name : 'Premade Coffee',
+                build: coffeeOrder,
+                subtotal: subtotal,
+                deliveryFee: deliveryFee,
+                vatAmount: vatAmount,
+                total: finalTotal,
+                price: finalTotal,  // Keep for compatibility
+                orderNumber: orderNumber
+            };
+            
+            // Show loading state
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const originalText = checkoutBtn.textContent;
+            checkoutBtn.textContent = 'Processing...';
+            checkoutBtn.disabled = true;
+            
+            // Send to server
+            fetch('/studio/direct-checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(checkoutData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.message || 'Something went wrong. Please try again.');
+                    checkoutBtn.textContent = originalText;
+                    checkoutBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Network error. Please check your connection and try again.');
+                checkoutBtn.textContent = originalText;
+                checkoutBtn.disabled = false;
+            });
         }
     </script>
 </body>

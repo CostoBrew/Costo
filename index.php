@@ -120,6 +120,7 @@ $router->get('/studio/premade', 'CoffeeStudioController@premadeStart', ['AuthMid
 // Studio API endpoints for updating selections
 $router->post('/studio/update-selection', 'CoffeeStudioController@updateSelection', ['AuthMiddleware', 'CSRFMiddleware']);
 $router->post('/studio/add-to-cart', 'CoffeeStudioController@addToCart', ['AuthMiddleware', 'CSRFMiddleware']);
+$router->post('/studio/direct-checkout', 'CoffeeStudioController@directCheckout', ['AuthMiddleware']);
 
 // Shopping Cart
 $router->get('/cart', 'CartController@index', ['AuthMiddleware']);
@@ -216,7 +217,11 @@ set_error_handler(function($severity, $message, $file, $line) {
     
     error_log("PHP Error: {$message} in {$file} on line {$line}");
     
-    if ($_ENV['APP_ENV'] === 'development') {
+    // Don't output errors during redirects or AJAX requests
+    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    $isRedirect = headers_sent() || ob_get_level() > 0;
+    
+    if ($_ENV['APP_ENV'] === 'development' && !$isAjax && !$isRedirect) {
         echo "<b>Error:</b> {$message} in <b>{$file}</b> on line <b>{$line}</b><br>";
     }
     

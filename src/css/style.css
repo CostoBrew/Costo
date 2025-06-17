@@ -536,3 +536,195 @@ footer hr {
                 border-radius: 0 0 0.375rem 0.375rem;
             }
         }
+/* Checkout Styles - Updated Design System */
+.checkout-container .empty-cart {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(var(--bs-secondary-rgb), 0.1);
+    border-radius: 0.375rem;
+    margin: 1rem 0;
+}
+
+.checkout-container .empty-cart a {
+    color: var(--bs-primary);
+    text-decoration: none;
+}
+
+.checkout-container .empty-cart a:hover {
+    text-decoration: underline;
+}
+
+.checkout-container .disabled-form {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(var(--bs-warning-rgb), 0.1);
+    border-radius: 0.375rem;
+    margin: 1rem 0;
+}
+
+.checkout-container .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.checkout-container .checkout-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.checkout-container .checkout-item:last-child {
+    border-bottom: none;
+}
+
+.checkout-container .item-info h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.checkout-container .item-info p {
+    margin: 0.25rem 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.checkout-container .item-total {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.checkout-container .order-totals {
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.checkout-container .total-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+}
+
+.checkout-container .total-row.final {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 0.5rem;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+/* New Checkout Design System Styles */
+.checkout-item-card {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(139, 69, 19, 0.1) !important;
+}
+
+.checkout-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.15) !important;
+}
+
+.bg-coffee {
+    background-color: #8B4513 !important;
+}
+
+.text-coffee {
+    color: #8B4513 !important;
+}
+
+.empty-cart-state {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    border: 2px dashed rgba(139, 69, 19, 0.3);
+}
+
+.order-totals {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.customer-info-section .form-control {
+    border: 2px solid rgba(139, 69, 19, 0.2);
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.customer-info-section .form-control:focus {
+    border-color: #8B4513;
+    box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.1);
+    background-color: white;
+}
+
+.order-summary-footer {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 1.5rem !important;
+    margin-top: 2rem !important;
+}
+
+/* Optimized for specific screen sizes */
+@media (max-width: 1600px) {
+    .main-content {
+        min-height: calc(100vh - 100px);
+        margin-bottom: 2rem;
+    }
+    
+    .form-bg {
+        max-height: calc(100vh - 140px);
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 1366px) {
+    .container {
+        max-width: 1200px;
+    }
+    
+    .size-1 {
+        font-size: 2.5rem !important;
+    }
+    
+    .form-bg {
+        padding: 1.5rem !important;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+    }
+    
+    .order-summary-section, 
+    .customer-info-section {
+        margin-bottom: 1.5rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .size-1 {
+        font-size: 2rem !important;
+    }
+    
+    .form-bg {
+        padding: 1rem !important;
+    }
+}
+
+/* Badge styling for checkout */
+.badge.bg-coffee {
+    font-size: 0.75rem;
+    border-radius: 1rem;
+}
+
+/* Enhanced form styling */
+.checkout-form .form-label {
+    font-weight: 600;
+    color: #333 !important;
+    margin-bottom: 0.5rem;
+}
+
+.checkout-form .form-control::placeholder {
+    color: rgba(51, 51, 51, 0.6);
+}
