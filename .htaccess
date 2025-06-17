@@ -40,6 +40,10 @@ Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Allow from all
 </Files>
 
+# Allow static assets (CSS, JS, images, fonts)
+RewriteCond %{REQUEST_URI} \.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ [NC]
+RewriteRule ^(.*)$ - [L]
+
 # URL Rewriting for clean URLs
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

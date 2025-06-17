@@ -99,9 +99,11 @@
                         <div class="mb-4 text-center">
                             <h3 class="font-garamond text-dark mb-2">Send us a message</h3>
                             <p class="text-dark small mb-0">We'll get back to you as soon as possible</p>
-                        </div>
-                        <form method="POST" id="contactForm" class="d-flex flex-column h-100">
-                            <input type="hidden" name="access_key" value="{{ config('services.web3forms.token') }}">
+                        </div>                        <form id="contactForm" class="d-flex flex-column h-100" action="https://api.web3forms.com/submit" method="POST">
+                            <input type="hidden" name="access_key" value="9dacd26a-f52a-4469-bb54-6e71accce2f6">
+                            <input type="hidden" name="subject" value="New Contact Form Submission from CostoBrew">
+                            <input type="hidden" name="from_name" value="CostoBrew Contact Form">
+                            <input type="hidden" name="redirect" value="/">
                             <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
                             <div class="form-floating mb-3">
@@ -138,6 +140,5 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/src/js/app.js"></script>
-
 </body>
 </html>

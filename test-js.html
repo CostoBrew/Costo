@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Test Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
+        .success { background-color: #d4edda; }
+        .error { background-color: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Loading Test</h1>
+    
+    <div id="test-results">
+        <div class="test">
+            <strong>1. Basic JavaScript Loading:</strong>
+            <span id="js-test">❌ Not loaded</span>
+        </div>
+        
+        <div class="test">
+            <strong>2. DOM Ready:</strong>
+            <span id="dom-test">❌ Not ready</span>
+        </div>
+        
+        <div class="test">
+            <strong>3. Contact Form Present:</strong>
+            <span id="form-test">❌ Not found</span>
+        </div>
+        
+        <div class="test">
+            <strong>4. Web3Forms Test:</strong>
+            <button onclick="testWeb3Forms()">Test Form Submission</button>
+            <span id="web3-test"></span>
+        </div>
+    </div>
+
+    <!-- Test form -->
+    <form id="contactForm" style="margin-top: 20px;">
+        <input type="hidden" name="access_key" value="9dacd26a-f52a-4469-bb54-6e71accce2f6">
+        <input type="text" name="name" placeholder="Test Name" value="Test User" required>
+        <input type="email" name="email" placeholder="Test Email" value="test@example.com" required>
+        <textarea name="message" placeholder="Test Message" required>This is a test message</textarea>
+        <button type="submit">Test Submit</button>
+    </form>
+    
+    <div id="result" style="margin-top: 10px;"></div>
+
+    <script>
+        // Test 1: Basic JavaScript
+        document.getElementById('js-test').innerHTML = '✅ Loaded';
+        document.getElementById('js-test').parentElement.classList.add('success');
+
+        // Test Web3Forms function
+        function testWeb3Forms() {
+            const testData = {
+                access_key: "9dacd26a-f52a-4469-bb54-6e71accce2f6",
+                name: "Test User",
+                email: "test@example.com", 
+                message: "This is a test message from the debug page"
+            };
+
+            document.getElementById('web3-test').innerHTML = '⏳ Testing...';
+            
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(testData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Web3Forms test response:', data);
+                document.getElementById('web3-test').innerHTML = '✅ Working! Check console for details.';
+                document.getElementById('web3-test').parentElement.classList.add('success');
+            })
+            .catch(error => {
+                console.error('Web3Forms test error:', error);
+                document.getElementById('web3-test').innerHTML = '❌ Error! Check console for details.';
+                document.getElementById('web3-test').parentElement.classList.add('error');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test 2: DOM Ready
+            document.getElementById('dom-test').innerHTML = '✅ Ready';
+            document.getElementById('dom-test').parentElement.classList.add('success');
+
+            // Test 3: Contact Form
+            const form = document.getElementById('contactForm');
+            if (form) {
+                document.getElementById('form-test').innerHTML = '✅ Found';
+                document.getElementById('form-test').parentElement.classList.add('success');
+            }
+        });
+    </script>
+
+    <!-- Load the actual app.js to test -->
+    <script src="/src/js/app.js"></script>
+</body>
+</html>
