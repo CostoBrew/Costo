@@ -85,17 +85,17 @@ class CoffeeStudioController
         $pastries = $this->getPastries();
         require_once __DIR__ . '/../view/studio/diy/pastry-selector.php';
     }
-    
-    // ========================================
+      // ========================================
     // PREMADE COFFEE - 3 STAGES
     // ========================================
-      /**
-     * Start Premade coffee selection
+    
+    /**
+     * Start Premade coffee selection - Unified 3-stage process
      */
     public function premadeStart()
     {
         $this->initializeSession();
-        require_once __DIR__ . '/../view/studio/premade/start.php';
+        require_once __DIR__ . '/../view/studio/premade/index.php';
     }
     
     /**

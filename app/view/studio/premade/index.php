@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIY Coffee Studio - Costobrew</title>
+    <title>Premade Coffee Studio - Costobrew</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <link href="/src/css/style.css" rel="stylesheet">
@@ -66,9 +66,8 @@
         <div class="row row-cols-2 w-100 content-row">
             <div class="col-lg form-bg p-4 content-columns d-flex flex-column">
                 <div class="text-dark w-50">
-                    <h4 class="fw-semibold">Coffee Studio - DIY</h4>
-                    <p>Welcome to the DIY Coffee Studio! Here you can create your own unique coffee blends and learn
-                        about the art of coffee making.</p>
+                    <h4 class="fw-semibold">Coffee Studio - Premade</h4>
+                    <p>Choose from our expertly crafted coffee blends. Quick, easy, and perfectly balanced for your taste.</p>
                 </div>                <div class="text-dark text-center mt-5">
                     <h5 id="stageTitle">Select your Cup</h5>
                 </div>
@@ -78,7 +77,7 @@
                     <div class="row row-cols-4 g-3 mt-3 justify-content-center">
                         <!-- Small Cup -->
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="small" data-price="3.00">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="small" data-price="4.50">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-hot" style="font-size: 2.5rem; color: #8B4513;"></i>
@@ -90,7 +89,7 @@
                         </div>
                         <!-- Medium Cup -->
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="medium" data-price="3.50">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="medium" data-price="5.50">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-hot" style="font-size: 2.5rem; color: #8B4513;"></i>
@@ -102,7 +101,7 @@
                         </div>
                         <!-- Large Cup -->
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="large" data-price="4.00">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="large" data-price="6.50">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
                                         <i class="bi bi-cup-hot" style="font-size: 2.5rem; color: #8B4513;"></i>
@@ -112,279 +111,100 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Extra Large Cup -->
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="cup" data-value="xlarge" data-price="4.50">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-cup-hot" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">X-Large</h6>
-                                    <small class="text-muted d-block mb-3">20 oz</small>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
-                <!-- Stage 2: Beans Selector -->
+                <!-- Stage 2: Coffee Selector -->
                 <div class="stage-content" id="stage-1">
                     <div class="row row-cols-4 g-3 mt-3 justify-content-center">
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="beans" data-value="arabica" data-price="0.00">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="house-blend" data-price="0.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
-                                        <i class="bi bi-egg" style="font-size: 2.5rem; color: #8B4513;"></i>
+                                        <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #8B4513;"></i>
                                     </div>
-                                    <h6 class="card-title text-dark mb-1">Arabica</h6>
-                                    <small class="text-muted d-block mb-3">Classic</small>
+                                    <h6 class="card-title text-dark mb-1">House Blend</h6>
+                                    <small class="text-muted d-block mb-3">Balanced</small>
                                 </div>
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="beans" data-value="robusta" data-price="0.50">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="colombian-supreme" data-price="1.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
-                                        <i class="bi bi-egg" style="font-size: 2.5rem; color: #8B4513;"></i>
+                                        <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #D2691E;"></i>
                                     </div>
-                                    <h6 class="card-title text-dark mb-1">Robusta</h6>
-                                    <small class="text-muted d-block mb-3">Strong</small>
+                                    <h6 class="card-title text-dark mb-1">Colombian Supreme</h6>
+                                    <small class="text-muted d-block mb-3">Premium</small>
                                 </div>
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="beans" data-value="liberica" data-price="0.75">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="dark-espresso" data-price="0.75">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
-                                        <i class="bi bi-egg" style="font-size: 2.5rem; color: #8B4513;"></i>
+                                        <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #654321;"></i>
                                     </div>
-                                    <h6 class="card-title text-dark mb-1">Liberica</h6>
+                                    <h6 class="card-title text-dark mb-1">Dark Espresso</h6>
                                     <small class="text-muted d-block mb-3">Bold</small>
                                 </div>
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="beans" data-value="excelsa" data-price="1.00">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="french-vanilla" data-price="1.25">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
-                                        <i class="bi bi-egg" style="font-size: 2.5rem; color: #8B4513;"></i>
+                                        <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #DEB887;"></i>
                                     </div>
-                                    <h6 class="card-title text-dark mb-1">Excelsa</h6>
-                                    <small class="text-muted d-block mb-3">Exotic</small>
+                                    <h6 class="card-title text-dark mb-1">French Vanilla</h6>
+                                    <small class="text-muted d-block mb-3">Flavored</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="hazelnut-cream" data-price="1.25">
+                                <div class="card-body p-2">
+                                    <div class="mb-3">
+                                        <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #CD853F;"></i>
+                                    </div>
+                                    <h6 class="card-title text-dark mb-1">Hazelnut Cream</h6>
+                                    <small class="text-muted d-block mb-3">Nutty</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="coffee" data-value="decaf-blend" data-price="0.00">
+                                <div class="card-body p-2">
+                                    <div class="mb-3">
+                                        <i class="bi bi-cup-straw" style="font-size: 2.5rem; color: #A0522D;"></i>
+                                    </div>
+                                    <h6 class="card-title text-dark mb-1">Decaf Blend</h6>
+                                    <small class="text-muted d-block mb-3">Decaf</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Stage 3: Milk Selector -->
+                <!-- Stage 3: Pastry Selector -->
                 <div class="stage-content" id="stage-2">
                     <div class="row row-cols-4 g-3 mt-3 justify-content-center">
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="milk" data-value="whole" data-price="0.00">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="none" data-price="0.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
-                                        <i class="bi bi-droplet" style="font-size: 2.5rem; color: #8B4513;"></i>
+                                        <i class="bi bi-x-circle" style="font-size: 2.5rem; color: #6c757d;"></i>
                                     </div>
-                                    <h6 class="card-title text-dark mb-1">Whole Milk</h6>
-                                    <small class="text-muted d-block mb-3">Regular</small>
+                                    <h6 class="card-title text-dark mb-1">No Pastry</h6>
+                                    <small class="text-muted d-block mb-3">Just Coffee</small>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="milk" data-value="skim" data-price="0.00">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-droplet" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Skim Milk</h6>
-                                    <small class="text-muted d-block mb-3">Low Fat</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="milk" data-value="almond" data-price="0.50">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-droplet" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Almond Milk</h6>
-                                    <small class="text-muted d-block mb-3">Nutty</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="milk" data-value="oat" data-price="0.60">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-droplet" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Oat Milk</h6>
-                                    <small class="text-muted d-block mb-3">Creamy</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stage 4: Sweeteners Selector -->
-                <div class="stage-content" id="stage-3">
-                    <div class="row row-cols-4 g-3 mt-3 justify-content-center">
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="sweetener" data-value="sugar" data-price="0.00">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-heart" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Sugar</h6>
-                                    <small class="text-muted d-block mb-3">Classic</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="sweetener" data-value="honey" data-price="0.25">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-heart" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Honey</h6>
-                                    <small class="text-muted d-block mb-3">Natural</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="sweetener" data-value="stevia" data-price="0.15">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-heart" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Stevia</h6>
-                                    <small class="text-muted d-block mb-3">Zero Cal</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="sweetener" data-value="agave" data-price="0.30">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-heart" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Agave</h6>
-                                    <small class="text-muted d-block mb-3">Organic</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stage 5: Syrups Selector -->
-                <div class="stage-content" id="stage-4">
-                    <div class="row row-cols-4 g-3 mt-3 justify-content-center">
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="syrup" data-value="vanilla" data-price="0.50">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-droplet-fill" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Vanilla</h6>
-                                    <small class="text-muted d-block mb-3">Sweet</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="syrup" data-value="caramel" data-price="0.50">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-droplet-fill" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Caramel</h6>
-                                    <small class="text-muted d-block mb-3">Rich</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="syrup" data-value="hazelnut" data-price="0.50">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-droplet-fill" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Hazelnut</h6>
-                                    <small class="text-muted d-block mb-3">Nutty</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="syrup" data-value="mocha" data-price="0.60">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-droplet-fill" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Mocha</h6>
-                                    <small class="text-muted d-block mb-3">Chocolate</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stage 6: Toppings Selector -->
-                <div class="stage-content" id="stage-5">
-                    <div class="row row-cols-4 g-3 mt-3 justify-content-center">
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="topping" data-value="whipped" data-price="0.50">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-cloud" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Whipped Cream</h6>
-                                    <small class="text-muted d-block mb-3">Fluffy</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="topping" data-value="cinnamon" data-price="0.25">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-stars" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Cinnamon</h6>
-                                    <small class="text-muted d-block mb-3">Spicy</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="topping" data-value="chocolate" data-price="0.40">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-square" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Chocolate Chips</h6>
-                                    <small class="text-muted d-block mb-3">Crunchy</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="topping" data-value="none" data-price="0.00">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-x-circle" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">No Topping</h6>
-                                    <small class="text-muted d-block mb-3">Plain</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stage 7: Pastry Selector -->
-                <div class="stage-content" id="stage-6">
-                    <div class="row row-cols-4 g-3 mt-3 justify-content-center">
                         <div class="col">
                             <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="croissant" data-price="2.50">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
-                                        <i class="bi bi-moon" style="font-size: 2.5rem; color: #8B4513;"></i>
+                                        <i class="bi bi-egg-fried" style="font-size: 2.5rem; color: #DAA520;"></i>
                                     </div>
                                     <h6 class="card-title text-dark mb-1">Croissant</h6>
                                     <small class="text-muted d-block mb-3">Buttery</small>
@@ -392,35 +212,68 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="muffin" data-price="2.00">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="blueberry-muffin" data-price="3.00">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
-                                        <i class="bi bi-circle" style="font-size: 2.5rem; color: #8B4513;"></i>
+                                        <i class="bi bi-circle-fill" style="font-size: 2.5rem; color: #4169E1;"></i>
                                     </div>
-                                    <h6 class="card-title text-dark mb-1">Muffin</h6>
-                                    <small class="text-muted d-block mb-3">Soft</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="donut" data-price="1.75">
-                                <div class="card-body p-2">
-                                    <div class="mb-3">
-                                        <i class="bi bi-circle" style="font-size: 2.5rem; color: #8B4513;"></i>
-                                    </div>
-                                    <h6 class="card-title text-dark mb-1">Donut</h6>
+                                    <h6 class="card-title text-dark mb-1">Blueberry Muffin</h6>
                                     <small class="text-muted d-block mb-3">Sweet</small>
                                 </div>
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="none" data-price="0.00">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="chocolate-cookie" data-price="2.25">
                                 <div class="card-body p-2">
                                     <div class="mb-3">
-                                        <i class="bi bi-x-circle" style="font-size: 2.5rem; color: #8B4513;"></i>
+                                        <i class="bi bi-circle-fill" style="font-size: 2.5rem; color: #8B4513;"></i>
                                     </div>
-                                    <h6 class="card-title text-dark mb-1">No Pastry</h6>
-                                    <small class="text-muted d-block mb-3">Just Coffee</small>
+                                    <h6 class="card-title text-dark mb-1">Chocolate Cookie</h6>
+                                    <small class="text-muted d-block mb-3">Chewy</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="danish" data-price="3.25">
+                                <div class="card-body p-2">
+                                    <div class="mb-3">
+                                        <i class="bi bi-heart-fill" style="font-size: 2.5rem; color: #FF69B4;"></i>
+                                    </div>
+                                    <h6 class="card-title text-dark mb-1">Danish Pastry</h6>
+                                    <small class="text-muted d-block mb-3">Fruit-filled</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="bagel" data-price="2.75">
+                                <div class="card-body p-2">
+                                    <div class="mb-3">
+                                        <i class="bi bi-circle" style="font-size: 2.5rem; color: #D2B48C;"></i>
+                                    </div>
+                                    <h6 class="card-title text-dark mb-1">Bagel</h6>
+                                    <small class="text-muted d-block mb-3">Cream Cheese</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="cinnamon-roll" data-price="3.50">
+                                <div class="card-body p-2">
+                                    <div class="mb-3">
+                                        <i class="bi bi-arrow-clockwise" style="font-size: 2.5rem; color: #CD853F;"></i>
+                                    </div>
+                                    <h6 class="card-title text-dark mb-1">Cinnamon Roll</h6>
+                                    <small class="text-muted d-block mb-3">Spiral</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white ingredient-card" data-stage="pastry" data-value="donut" data-price="1.95">
+                                <div class="card-body p-2">
+                                    <div class="mb-3">
+                                        <i class="bi bi-circle" style="font-size: 2.5rem; color: #FF6347;"></i>
+                                    </div>
+                                    <h6 class="card-title text-dark mb-1">Glazed Donut</h6>
+                                    <small class="text-muted d-block mb-3">Classic</small>
                                 </div>
                             </div>
                         </div>
@@ -503,25 +356,17 @@
     <script>
         // Stage management
         let currentStage = 0;
-        const totalStages = 7;
+        const totalStages = 3;
         const stageTitles = [
             "Select your Cup",
-            "Select your Beans", 
-            "Select your Milk",
-            "Select your Sweeteners",
-            "Select your Syrups",
-            "Select your Toppings",
-            "Select your Coffee's perfect match"
+            "Choose your Coffee", 
+            "Add a Pastry"
         ];
         
         // Order state
         let coffeeOrder = {
             cup: null,
-            beans: null,
-            milk: null,
-            sweetener: null,
-            syrup: null,
-            topping: null,
+            coffee: null,
             pastry: null
         };
         
@@ -674,11 +519,7 @@
             // Reset order state
             coffeeOrder = {
                 cup: null,
-                beans: null,
-                milk: null,
-                sweetener: null,
-                syrup: null,
-                topping: null,
+                coffee: null,
                 pastry: null
             };
             

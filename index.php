@@ -114,11 +114,8 @@ $router->get('/studio', 'CoffeeStudioController@index', ['AuthMiddleware']);
 // DIY Coffee (Single Page Dynamic)
 $router->get('/studio/diy', 'CoffeeStudioController@diyStart', ['AuthMiddleware']);
 
-// Premade Coffee (3 stages)
+// Premade Coffee (Unified Single Page)
 $router->get('/studio/premade', 'CoffeeStudioController@premadeStart', ['AuthMiddleware']);
-$router->get('/studio/premade/cup-size', 'CoffeeStudioController@premadeCupSize', ['AuthMiddleware']);
-$router->get('/studio/premade/coffee', 'CoffeeStudioController@premadeCoffee', ['AuthMiddleware']);
-$router->get('/studio/premade/pastry', 'CoffeeStudioController@premadePastry', ['AuthMiddleware']);
 
 // Studio API endpoints for updating selections
 $router->post('/studio/update-selection', 'CoffeeStudioController@updateSelection', ['AuthMiddleware', 'CSRFMiddleware']);

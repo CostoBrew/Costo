@@ -29,12 +29,7 @@
 
                 <!-- Right side nav links (cart + user menu) -->
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link position-relative" href="/cart">
-                            <i class="bi bi-cart fs-5"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-                        </a>
-                    </li>                    <li class="nav-item dropdown">
+                        <li class="nav-item dropdown">
                         <?php
                         // Check if user is logged in
                         if (session_status() === PHP_SESSION_NONE) {
