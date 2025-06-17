@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Welcome to Costobrew</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Costobrew</title>
     <!-- Load fonts first -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +19,8 @@
 
 <div class="min-vh-100 d-flex flex-wrap align-items-center overflow-hidden bg-kopi" id="home">
     <div class="container-fluid px-0">
-        <div>            <div class="row row-cols-1 row-cols-lg-3 p-3 px-lg-0 text-white">
+        <div>
+            <div class="row row-cols-1 row-cols-lg-3 p-3 px-lg-0 text-white">
                 <div class="col-lg-3 ps-lg-5 mb-4 mb-lg-0 text-center text-lg-start">
                     <h1 class="font-garamond size-1 text-white">Your Coffee</h1>
                     <p class="px-3 px-lg-0 text-white">Craft your perfect cup from the comfort of your couch! Costobrew is the online coffee haven where your the barista.</p>
@@ -31,7 +33,8 @@
                 </div>
             </div>
         </div>
-    </div>    <div class="container-fluid px-0 position-absolute bottom-0 pb-5 px-3 px-lg-5 d-flex justify-content-center">
+    </div>
+    <div class="container-fluid px-0 position-absolute bottom-0 pb-5 px-3 px-lg-5 d-flex justify-content-center">
         <div class="d-flex align-items-center flex-column flex-sm-row text-center">
             <a href="/studio/diy" class="btn btn-coffee rounded rounded-pill mb-2 mb-sm-0">Create Your Blend</a>
             <p class="mb-0 mx-2 d-none d-sm-block">- or -</p>

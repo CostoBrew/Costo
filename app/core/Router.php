@@ -173,7 +173,9 @@ class Router
         }
 
         throw new Exception("Invalid route action: " . print_r($action, true));
-    }    /**
+    }
+
+    /**
      * Call controller method
      */
     private function callControllerMethod($controllerName, $methodName)
@@ -197,7 +199,9 @@ class Router
         }
 
         return call_user_func_array([$controller, $methodName], array_values($this->params));
-    }    /**
+    }
+
+    /**
      * Run middleware
      */
     private function runMiddleware($middlewareClass)
@@ -219,7 +223,9 @@ class Router
         } elseif (is_callable($middlewareClass)) {
             call_user_func($middlewareClass);
         }
-    }    /**
+    }
+
+    /**
      * Handle 404 Not Found
      */
     private function handleNotFound()

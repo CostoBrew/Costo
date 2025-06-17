@@ -8,7 +8,9 @@
 class DatabaseConfig
 {
     private static $connection = null;
-    private static $config = [];    /**
+    private static $config = [];
+
+    /**
      * Load environment variables from .env file
      */
     public static function loadEnvironment()
