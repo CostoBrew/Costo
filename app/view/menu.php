@@ -115,7 +115,7 @@
                                 
                                 <div class="mt-auto">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <span class="price-tag">$<?php echo number_format($coffee['price'], 2); ?></span>
+                                        <span class="price-tag">₱<?php echo number_format($coffee['price'], 2); ?></span>
                                         <small class="text-muted"><?php echo e($coffee['type']); ?></small>
                                     </div>
 

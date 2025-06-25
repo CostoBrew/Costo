@@ -16,6 +16,11 @@ class AuthController
     {
         // Check if user is already authenticated
         if (FirebaseAuthMiddleware::isAuthenticated()) {
+            // Check if user is admin and redirect to admin dashboard
+            if (isset($_SESSION['user_email']) && $_SESSION['user_email'] === '1admin@costobrew.com') {
+                header('Location: /admin');
+                exit;
+            }
             $returnUrl = $_GET['return'] ?? '/';
             header('Location: ' . $returnUrl);
             exit;
@@ -119,7 +124,7 @@ class AuthController
                     'session' => [
                         'expiresAt' => date('c', time() + 3600),
                         'loginTime' => date('c')
-                    ],                    'redirect' => $_POST['return_url'] ?? '/'
+                    ],                    'redirect' => $userData['email'] === '1admin@costobrew.com' ? '/admin' : ($_POST['return_url'] ?? '/')
                 ];
 
                 http_response_code(200);

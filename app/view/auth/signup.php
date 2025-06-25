@@ -764,16 +764,16 @@ document.getElementById('password').addEventListener('input', function() {
 });
 
 // Check if user is already logged in (only if auth is available)
-document.addEventListener('DOMContentLoaded', function() {
-    if (typeof auth !== 'undefined' && auth) {
-        auth.onAuthStateChanged(function(user) {
-            if (user) {
+//document.addEventListener('DOMContentLoaded', function() {
+   // if (typeof auth !== 'undefined' && auth) {
+        //auth.onAuthStateChanged(function(user) {
+          //  if (user) {
                 // User is signed in, redirect to home
-                window.location.href = '/';
-            }
-        });
-    }
-});
+             //   window.location.href = '/';
+          //  }
+        //});
+    //}
+//});
 </script>
 </body>
 </html>

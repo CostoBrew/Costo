@@ -44,7 +44,9 @@ class AdminMiddleware
      */
     private function isAdmin()
     {
-        return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+        // Check if user email is the specific admin email
+        $userEmail = $_SESSION['user_email'] ?? '';
+        return $userEmail === '1admin@costobrew.com';
     }
 
     /**

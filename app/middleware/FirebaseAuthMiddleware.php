@@ -230,8 +230,7 @@ class FirebaseAuthMiddleware
 
         // Check specific admin emails (fallback)
         $adminEmails = [
-            'admin@costobrew.com',
-            'owner@costobrew.com'
+            '1admin@costobrew.com'
         ];
 
         return in_array($userData['email'], $adminEmails);

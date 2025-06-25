@@ -31,6 +31,8 @@ require_once 'app/core/Router.php';
 require_once 'app/middleware/SecurityMiddleware.php';
 require_once 'app/middleware/CSRFMiddleware.php';
 require_once 'app/middleware/RateLimitMiddleware.php';
+require_once 'app/middleware/AuthMiddleware.php';
+require_once 'app/middleware/AdminMiddleware.php';
 require_once 'app/middleware/FirebaseAuthMiddleware.php';
 
 // Load controllers
@@ -56,13 +58,8 @@ $router->middleware([
 // AUTHENTICATION HANDLING
 // ===================================
 
-// Get current path for authentication
-$currentPath = $_SERVER['REQUEST_URI'];
-$pathOnly = strtok($currentPath, '?'); // Remove query parameters
-
-// Handle Firebase authentication
-$authResult = FirebaseAuthMiddleware::handle($pathOnly);
-FirebaseAuthMiddleware::handleAuthResponse($authResult, $pathOnly);
+// Note: Firebase authentication is handled by FirebaseAuthMiddleware when needed
+// Regular session-based authentication is handled by AuthMiddleware
 
 // ===================================
 // PUBLIC ROUTES (No Authentication)
@@ -75,6 +72,11 @@ $router->get('/', function() {
 
 $router->get('/home', function() {
     require_once 'app/view/home.php';
+});
+
+// Menu page
+$router->get('/menu', function() {
+    require_once 'app/view/menu.php';
 });
 
 // Authentication routes
@@ -164,6 +166,7 @@ $router->post('/api/orders', 'ApiController@createOrder', [
 
 $router->get('/admin', 'AdminController@dashboard', ['AdminMiddleware']);
 $router->get('/admin/coffees', 'AdminController@manageCoffees', ['AdminMiddleware']);
+$router->get('/admin/menu', 'AdminController@manageCoffees', ['AdminMiddleware']);
 $router->get('/admin/orders', 'AdminController@manageOrders', ['AdminMiddleware']);
 $router->get('/admin/customers', 'AdminController@manageCustomers', ['AdminMiddleware']);
 
@@ -171,6 +174,19 @@ $router->get('/admin/customers', 'AdminController@manageCustomers', ['AdminMiddl
 $router->post('/admin/coffees', 'AdminController@createCoffee', ['AdminMiddleware', 'CSRFMiddleware']);
 $router->put('/admin/coffees/{id}', 'AdminController@updateCoffee', ['AdminMiddleware', 'CSRFMiddleware']);
 $router->delete('/admin/coffees/{id}', 'AdminController@deleteCoffee', ['AdminMiddleware', 'CSRFMiddleware']);
+$router->delete('/admin/coffees/{id}/delete', 'AdminController@deleteCoffee', ['AdminMiddleware']);
+
+// Admin menu component CRUD operations
+$router->post('/admin/menu/{category}', 'AdminController@createMenuItem', ['AdminMiddleware']);
+$router->put('/admin/menu/{category}/{id}', 'AdminController@updateMenuItem', ['AdminMiddleware']);
+$router->delete('/admin/menu/{category}/{id}/delete', 'AdminController@deleteMenuItem', ['AdminMiddleware']);
+$router->get('/admin/menu/{category}/{id}/edit', 'AdminController@getMenuItem', ['AdminMiddleware']);
+
+// Admin order operations
+$router->delete('/admin/orders/{id}/delete', 'AdminController@deleteOrder', ['AdminMiddleware']);
+$router->put('/admin/orders/{id}/status', 'AdminController@updateOrderStatus', ['AdminMiddleware', 'CSRFMiddleware']);
+$router->get('/admin/orders/{id}/details', 'AdminController@getOrderDetails', ['AdminMiddleware']);
+$router->put('/admin/orders/{id}/update', 'AdminController@updateOrder', ['AdminMiddleware']);
 
 // ===================================
 // ERROR HANDLING ROUTES
@@ -277,11 +293,13 @@ function user() {
  * Generate URL
  */
 function url($path) {
-    $baseUrl = $_ENV['APP_URL'] ?? 'http://localhost';
-    // Remove trailing slash from base URL and leading slash from path, then combine
+    $baseUrl = $_ENV['APP_URL'] ?? 'http://localhost:8000';
+    // Remove trailing slash from base URL and ensure path starts with /
     $baseUrl = rtrim($baseUrl, '/');
-    $path = ltrim($path, '/');
-    return $baseUrl . '/' . $path;
+    if (!str_starts_with($path, '/')) {
+        $path = '/' . $path;
+    }
+    return $baseUrl . $path;
 }
 
 /**
@@ -313,3 +331,51 @@ try {
         }
     }
 }
+
+// ===================================
+// DEBUG ROUTES (Development only)
+// ===================================
+
+if (($_ENV['APP_ENV'] ?? 'development') === 'development') {
+    // Route for debugging - list all routes
+    $router->get('/debug/routes', function() {
+        echo '<h1>Router Debug Information</h1>';
+        echo '<style>body{font-family:Arial,sans-serif;margin:20px;} .info{background:#f0f0f0;padding:10px;margin:10px 0;border-radius:5px;}</style>';
+        
+        echo '<div class="info">';
+        echo '<h2>Current Request</h2>';
+        echo '<p><strong>URI:</strong> ' . $_SERVER['REQUEST_URI'] . '</p>';
+        echo '<p><strong>Method:</strong> ' . $_SERVER['REQUEST_METHOD'] . '</p>';
+        echo '<p><strong>Parsed Path:</strong> ' . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) . '</p>';
+        echo '<p><strong>Document Root:</strong> ' . $_SERVER['DOCUMENT_ROOT'] . '</p>';
+        echo '<p><strong>Script Name:</strong> ' . $_SERVER['SCRIPT_NAME'] . '</p>';
+        echo '</div>';
+        
+        echo '<div class="info">';
+        echo '<h2>Environment</h2>';
+        echo '<p><strong>APP_URL:</strong> ' . ($_ENV['APP_URL'] ?? 'not set') . '</p>';
+        echo '<p><strong>APP_ENV:</strong> ' . ($_ENV['APP_ENV'] ?? 'not set') . '</p>';
+        echo '</div>';
+        
+        echo '<div class="info">';
+        echo '<h2>Session Information</h2>';
+        echo '<p><strong>Session Status:</strong> ' . (session_status() === PHP_SESSION_ACTIVE ? 'Active' : 'Inactive') . '</p>';
+        if (isset($_SESSION['user_id'])) {
+            echo '<p><strong>User ID:</strong> ' . $_SESSION['user_id'] . '</p>';
+        } else {
+            echo '<p><strong>User:</strong> Not logged in</p>';
+        }
+        echo '</div>';
+    });
+    
+    // Simple test route
+    $router->get('/debug/test', function() {
+        echo '<h1>Router Test</h1>';
+        echo '<p>✅ Router is working correctly!</p>';
+        echo '<p>Current URL: ' . $_SERVER['REQUEST_URI'] . '</p>';
+        echo '<p>Base URL from env: ' . ($_ENV['APP_URL'] ?? 'not set') . '</p>';
+        echo '<a href="/debug/routes">View debug info</a> | <a href="/">Home</a>';
+    });
+}
+
+// ===================================

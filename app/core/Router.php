@@ -72,13 +72,17 @@ class Router
         // Convert {param} to named capture groups
         $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '(?P<$1>[^/]+)', $uri);
         return '#^' . $pattern . '$#';
-    }
-
-    /**
+    }    /**
      * Sanitize URI
      */
     private function sanitizeUri($uri)
     {
+        // Handle root case
+        if ($uri === '' || $uri === '/') {
+            return '/';
+        }
+        
+        // Remove leading and trailing slashes, then add single leading slash
         $uri = trim($uri, '/');
         return '/' . $uri;
     }
@@ -199,9 +203,7 @@ class Router
         }
 
         return call_user_func_array([$controller, $methodName], array_values($this->params));
-    }
-
-    /**
+    }    /**
      * Run middleware
      */
     private function runMiddleware($middlewareClass)
@@ -218,10 +220,17 @@ class Router
                     if (method_exists($middleware, 'handle')) {
                         $middleware->handle();
                     }
+                } else {
+                    error_log("Middleware class not found: {$middlewareClass}");
                 }
+            } else {
+                error_log("Middleware file not found: {$middlewareFile}");
             }
         } elseif (is_callable($middlewareClass)) {
             call_user_func($middlewareClass);
+        } elseif (is_object($middlewareClass) && method_exists($middlewareClass, 'handle')) {
+            // Handle middleware objects (like RateLimitMiddleware::create())
+            $middlewareClass->handle();
         }
     }
 

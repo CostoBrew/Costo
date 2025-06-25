@@ -38,7 +38,7 @@
                             </div>
                             
                             <div class="order-total">
-                                <strong>$<?= number_format($order['total'], 2) ?></strong>
+                                <strong>₱<?= number_format($order['total'], 2) ?></strong>
                             </div>
                         </div>
                         

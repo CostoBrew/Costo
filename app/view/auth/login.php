@@ -214,10 +214,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // Normal case - user is authenticated and should be redirected
-                const redirectUrl = urlParams.get('return') || '/';
-                setTimeout(() => {
-                    window.location.href = redirectUrl;
-                }, 1000);
+               // const redirectUrl = urlParams.get('return') || '/';
+                //setTimeout(() => {
+                   // window.location.href = redirectUrl;
+               // }, 1000);
             }
         });
     }

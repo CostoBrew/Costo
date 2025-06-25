@@ -24,7 +24,7 @@
         <div class="col-lg-8">
             <div class="receipt-container form-bg p-4 rounded-4 shadow-lg h-100">
                 <!-- Success Header -->
-                <div class="text-center mb-4">
+                <div class="text-center mb-4 print-compact-header">
                     <div class="success-icon mb-3">
                         <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
                     </div>
@@ -68,17 +68,181 @@
                                 <div class="item-details flex-grow-1">
                                     <h5 class="text-dark mb-2"><?= htmlspecialchars($item['item_name'] ?? 'Custom Coffee') ?></h5>
                                     
-                                    <?php if ($item['item_type'] === 'diy' && isset($item['customization_data'])): ?>
+                                    <?php if (isset($item['customization_data']) && !empty($item['customization_data'])): ?>
                                         <div class="customizations mb-3">
-                                            <h6 class="text-muted mb-2">Customizations:</h6>
-                                            <div class="customization-list">
-                                                <?php foreach ($item['customization_data'] as $key => $value): ?>
-                                                    <?php if ($key !== 'name' && $key !== 'type'): ?>
-                                                        <span class="badge bg-light text-dark me-2 mb-1">
-                                                            <?= htmlspecialchars($key) ?>: <?= htmlspecialchars($value['value'] ?? $value) ?>
-                                                        </span>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
+                                            <h6 class="text-muted mb-2">
+                                                <i class="bi bi-gear me-1"></i>Customizations:
+                                            </h6>
+                                            <div class="customization-details">
+                                                <?php
+                                                $customData = is_string($item['customization_data'])
+                                                    ? json_decode($item['customization_data'], true)
+                                                    : $item['customization_data'];
+
+                                                if ($customData):
+                                                ?>
+                                                    <div class="row g-2">
+                                                        <?php
+                                                        // Helper functions (using anonymous functions to avoid redeclaration)
+                                                        $getDisplayValue = function($item) {
+                                                            if (is_array($item) && isset($item['name'])) {
+                                                                return $item['name'];
+                                                            } elseif (is_array($item) && isset($item['value'])) {
+                                                                return $item['value'];
+                                                            } elseif (is_string($item)) {
+                                                                return $item;
+                                                            }
+                                                            return 'N/A';
+                                                        };
+
+                                                        $getPrice = function($item) {
+                                                            if (is_array($item) && isset($item['price'])) {
+                                                                return ' (+₱' . number_format($item['price'], 2) . ')';
+                                                            }
+                                                            return '';
+                                                        };
+
+                                                        // Display customizations in organized way
+                                                        if (isset($customData['cup'])):
+                                                            $cupValue = $getDisplayValue($customData['cup']);
+                                                            $cupPrice = $getPrice($customData['cup']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Cup Size</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($cupValue) ?><?= $cupPrice ?></strong>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php if (isset($customData['beans'])):
+                                                            $beansValue = $getDisplayValue($customData['beans']);
+                                                            $beansPrice = $getPrice($customData['beans']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Coffee Beans</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($beansValue) ?><?= $beansPrice ?></strong>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php if (isset($customData['coffee'])):
+                                                            $coffeeValue = $getDisplayValue($customData['coffee']);
+                                                            $coffeePrice = $getPrice($customData['coffee']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Coffee Type</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($coffeeValue) ?><?= $coffeePrice ?></strong>
+                                                                </div>
+                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php if (isset($customData['milk']) && !empty($customData['milk'])):
+                                                            $milkValue = $getDisplayValue($customData['milk']);
+                                                            $milkPrice = $getPrice($customData['milk']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Milk</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($milkValue) ?><?= $milkPrice ?></strong>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php if (isset($customData['sweetener']) && !empty($customData['sweetener'])):
+                                                            $sweetenerValue = $getDisplayValue($customData['sweetener']);
+                                                            $sweetenerPrice = $getPrice($customData['sweetener']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Sweetener</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($sweetenerValue) ?><?= $sweetenerPrice ?></strong>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php if (isset($customData['syrup']) && !empty($customData['syrup'])):
+                                                            $syrupValue = $getDisplayValue($customData['syrup']);
+                                                            $syrupPrice = $getPrice($customData['syrup']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Syrup</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($syrupValue) ?><?= $syrupPrice ?></strong>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php if (isset($customData['topping']) && !empty($customData['topping'])):
+                                                            $toppingValue = $getDisplayValue($customData['topping']);
+                                                            $toppingPrice = $getPrice($customData['topping']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Topping</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($toppingValue) ?><?= $toppingPrice ?></strong>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php if (isset($customData['pastry']) && !empty($customData['pastry'])):
+                                                            $pastryValue = $getDisplayValue($customData['pastry']);
+                                                            $pastryPrice = $getPrice($customData['pastry']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Pastry</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($pastryValue) ?><?= $pastryPrice ?></strong>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php
+                                                        // Handle premade coffee customizations
+                                                        if (isset($customData['size'])):
+                                                            $sizeValue = $getDisplayValue($customData['size']);
+                                                            $sizePrice = $getPrice($customData['size']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Size</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($sizeValue) ?><?= $sizePrice ?></strong>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php if (isset($customData['temperature'])):
+                                                            $tempValue = $getDisplayValue($customData['temperature']);
+                                                        ?>
+                                                            <div class="col-md-6 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Temperature</small>
+                                                                    <strong class="text-coffee"><?= htmlspecialchars($tempValue) ?></strong>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <?php if (isset($customData['extras']) && is_array($customData['extras'])): ?>
+                                                            <div class="col-12 mb-2">
+                                                                <div class="customization-item p-2 bg-light rounded">
+                                                                    <small class="text-muted d-block">Extras</small>
+                                                                    <div class="d-flex flex-wrap gap-1">
+                                                                        <?php foreach ($customData['extras'] as $extra):
+                                                                            $extraValue = $getDisplayValue($extra);
+                                                                            $extraPrice = $getPrice($extra);
+                                                                        ?>
+                                                                            <span class="badge bg-coffee text-white">
+                                                                                <?= htmlspecialchars($extraValue) ?><?= $extraPrice ?>
+                                                                            </span>
+                                                                        <?php endforeach; ?>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     <?php endif; ?>
@@ -151,8 +315,8 @@
                         <a href="/studio" class="btn btn-coffee rounded-pill btn-sm">
                             <i class="bi bi-cup-hot me-2"></i>Coffee Studio
                         </a>
-                        <button onclick="window.print()" class="btn btn-outline-dark rounded-pill btn-sm">
-                            <i class="bi bi-printer me-2"></i>Print Receipt
+                        <button onclick="printReceipt()" class="btn btn-outline-dark rounded-pill btn-sm">
+                            <i class="bi bi-printer me-2"></i>Print Receipt (9x13cm - Single Page)
                         </button>
                     </div>
                 </div>                <!-- Quick Summary Card -->
@@ -240,6 +404,32 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+function printReceipt() {
+    // Add print-specific class to body for additional styling
+    document.body.classList.add('printing-receipt');
+
+    // Trigger print
+    window.print();
+
+    // Remove class after print dialog
+    setTimeout(() => {
+        document.body.classList.remove('printing-receipt');
+    }, 1000);
+}
+
+// Optional: Auto-focus print button for keyboard accessibility
+document.addEventListener('DOMContentLoaded', function() {
+    // Add keyboard shortcut for printing (Ctrl+P)
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'p') {
+            e.preventDefault();
+            printReceipt();
+        }
+    });
+});
+</script>
+
 <style>
 /* Widescreen Receipt Layout */
 .sidebar-content {
@@ -251,6 +441,35 @@
 .actions-card {
     border: 2px solid #8B4513 !important;
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+}
+
+/* Customization styling */
+.customization-item {
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease;
+}
+
+.customization-item:hover {
+    border-color: #8B4513;
+    box-shadow: 0 2px 4px rgba(139, 69, 19, 0.1);
+}
+
+.customization-item small {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.customization-item strong {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.badge.bg-coffee {
+    background-color: #8B4513 !important;
+    font-size: 0.75rem;
+    padding: 0.4em 0.6em;
 }
 
 .actions-card h5 {
@@ -337,21 +556,397 @@
 }
 
 @media print {
+    /* Hide non-essential elements */
     .navbar, .footer, .sidebar-content {
         display: none !important;
     }
-    
-    .col-lg-8 {
-        width: 100% !important;
+
+    /* Set page size to 9 x 13 cm - STRICT single page only */
+    @page {
+        size: 9cm 13cm;
+        margin: 0.2cm;
     }
-    
+
+    /* Reset body and container for print - 9x13cm optimization */
     body {
         background: white !important;
+        font-size: 9px !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
     }
-    
+
+    .container-fluid {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .main-content {
+        padding: 0 !important;
+    }
+
+    .col-lg-8 {
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    /* STRICT single page receipt container - 9x13cm */
+    .receipt-container {
+        background: white !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0.05cm !important;
+        margin: 0 !important;
+        height: 12.6cm !important;
+        max-height: 12.6cm !important;
+        width: 8.6cm !important;
+        max-width: 8.6cm !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
     .form-bg {
         background: white !important;
         box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    /* MINIMAL header for single page constraint */
+    .text-center h1 {
+        font-size: 12px !important;
+        margin-bottom: 2px !important;
+        line-height: 1.0 !important;
+    }
+
+    .success-icon {
+        display: none !important; /* Hide icon to save space */
+    }
+
+    .lead {
+        font-size: 8px !important;
+        margin-bottom: 2px !important;
+        line-height: 1.0 !important;
+    }
+
+    .print-compact-header {
+        margin-bottom: 4px !important;
+        padding: 0 !important;
+    }
+
+    /* MINIMAL order header for single page */
+    .order-header {
+        padding: 3px !important;
+        margin-bottom: 3px !important;
+        background: #f8f9fa !important;
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .order-header .row {
+        margin: 0 !important;
+    }
+
+    .order-header .col-md-4 {
+        padding: 1px !important;
+        margin-bottom: 1px !important;
+    }
+
+    .order-header h6 {
+        font-size: 7px !important;
+        margin-bottom: 0px !important;
+        font-weight: 600 !important;
+        line-height: 1.0 !important;
+    }
+
+    .order-header p {
+        font-size: 7px !important;
+        margin-bottom: 0px !important;
+        line-height: 1.0 !important;
+    }
+
+    .order-header .h5 {
+        font-size: 8px !important;
+        line-height: 1.0 !important;
+    }
+
+    .order-header i {
+        font-size: 7px !important;
+    }
+
+    /* MINIMAL order items for single page */
+    .order-items-section h3 {
+        font-size: 9px !important;
+        margin-bottom: 2px !important;
+        line-height: 1.0 !important;
+    }
+
+    .receipt-item-card {
+        padding: 2px !important;
+        margin-bottom: 2px !important;
+        background: white !important;
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .receipt-item-card h5 {
+        font-size: 8px !important;
+        margin-bottom: 1px !important;
+        line-height: 1.0 !important;
+    }
+
+    .receipt-item-card .d-flex {
+        align-items: flex-start !important;
+    }
+
+    .item-total h4 {
+        font-size: 8px !important;
+        margin-bottom: 0 !important;
+        line-height: 1.0 !important;
+    }
+
+    /* MINIMAL customizations for single page */
+    .customizations h6 {
+        font-size: 6px !important;
+        margin-bottom: 1px !important;
+        line-height: 1.0 !important;
+    }
+
+    .customization-item {
+        padding: 1px !important;
+        margin-bottom: 1px !important;
+        border: 1px solid #e9ecef !important;
+        background: #f8f9fa !important;
+    }
+
+    .customization-item small {
+        font-size: 5px !important;
+        line-height: 1.0 !important;
+    }
+
+    .customization-item strong {
+        font-size: 5px !important;
+        line-height: 1.0 !important;
+    }
+
+    .badge {
+        font-size: 4px !important;
+        padding: 1px 2px !important;
+    }
+
+    .customizations {
+        margin-bottom: 1px !important;
+    }
+
+    /* Limit customization display */
+    .customization-item:nth-child(n+7) {
+        display: none !important; /* Hide beyond 6 customizations */
+    }
+
+    /* MINIMAL totals for single page */
+    .order-totals {
+        padding: 2px !important;
+        margin-bottom: 2px !important;
+        background: #f8f9fa !important;
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .order-totals .d-flex {
+        margin-bottom: 1px !important;
+    }
+
+    .order-totals span {
+        font-size: 6px !important;
+        line-height: 1.0 !important;
+    }
+
+    .order-totals .h5 {
+        font-size: 7px !important;
+        line-height: 1.0 !important;
+    }
+
+    .order-totals .h4 {
+        font-size: 8px !important;
+        line-height: 1.0 !important;
+    }
+
+    /* MINIMAL delivery info for single page */
+    .delivery-info {
+        padding: 2px !important;
+        margin-bottom: 0 !important;
+        background: #f8f9fa !important;
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .delivery-info h5 {
+        font-size: 7px !important;
+        margin-bottom: 1px !important;
+        line-height: 1.0 !important;
+    }
+
+    .delivery-info p {
+        font-size: 5px !important;
+        margin-bottom: 1px !important;
+        line-height: 1.0 !important;
+    }
+
+    .delivery-info strong {
+        font-size: 5px !important;
+        line-height: 1.0 !important;
+    }
+
+    .delivery-info i {
+        font-size: 6px !important;
+    }
+
+    /* Hide spacing elements */
+    .pt-5, .pb-3 {
+        padding: 0 !important;
+    }
+
+    .mb-4, .mb-3, .mb-2 {
+        margin-bottom: 4px !important;
+    }
+
+    /* Ensure content fits in width */
+    .row.g-4 {
+        margin: 0 !important;
+    }
+
+    .col-md-6 {
+        width: 50% !important;
+        padding: 2px !important;
+    }
+
+    .col-md-4 {
+        width: 33.333% !important;
+        padding: 2px !important;
+    }
+
+    .col-12 {
+        width: 100% !important;
+        padding: 2px !important;
+    }
+
+    /* STRICT single page constraint for 9x13cm */
+    .printing-receipt .receipt-container {
+        max-height: 12.6cm !important;
+        overflow: hidden !important;
+    }
+
+    /* Hide non-essential elements to save space */
+    .delivery-info .col-md-6:last-child {
+        display: none !important; /* Hide special instructions column */
+    }
+
+    .delivery-info .row {
+        margin: 0 !important;
+    }
+
+    /* Make delivery info single column */
+    .delivery-info .col-md-6:first-child {
+        width: 100% !important;
+    }
+
+    /* Force single page layout */
+    * {
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+    /* Ensure no content overflows */
+    .receipt-container * {
+        max-width: 100% !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+
+    /* Ensure customizations display in compact grid */
+    .customization-details .row {
+        margin: 0 !important;
+    }
+
+    .customization-details .col-md-6 {
+        padding: 1px !important;
+    }
+
+    /* Optimize text spacing */
+    h1, h2, h3, h4, h5, h6 {
+        line-height: 1.1 !important;
+        margin-top: 0 !important;
+    }
+
+    p {
+        line-height: 1.2 !important;
+        margin-bottom: 2px !important;
+    }
+
+    /* Ensure badges don't wrap */
+    .badge {
+        white-space: nowrap !important;
+        display: inline-block !important;
+    }
+
+    /* Compact the customization grid further */
+    .customizations .row.g-2 {
+        --bs-gutter-x: 2px !important;
+        --bs-gutter-y: 1px !important;
+    }
+
+    /* Ensure single page layout */
+    .order-items-section {
+        flex: 1 !important;
+        overflow: hidden !important;
+    }
+
+    /* STRICT item limit for single page */
+    .receipt-item-card:nth-child(n+4) {
+        display: none !important; /* Hide items beyond 3rd to ensure single page */
+    }
+
+    /* Add ellipsis for overflow text */
+    .customization-item strong,
+    .customization-item small {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    /* ABSOLUTE single page enforcement */
+    html, body {
+        height: 13cm !important;
+        max-height: 13cm !important;
+        overflow: hidden !important;
+    }
+
+    .container-fluid,
+    .main-content,
+    .col-lg-8 {
+        height: 100% !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+    }
+
+    /* Hide any potential overflow content */
+    .order-items-section {
+        max-height: 6cm !important;
+        overflow: hidden !important;
+    }
+
+    /* Compress spacing even more */
+    .mb-1, .mb-2, .mb-3, .mb-4, .mb-5 {
+        margin-bottom: 1px !important;
+    }
+
+    .pt-1, .pt-2, .pt-3, .pt-4, .pt-5 {
+        padding-top: 1px !important;
+    }
+
+    .pb-1, .pb-2, .pb-3, .pb-4, .pb-5 {
+        padding-bottom: 1px !important;
     }
 }
 </style>

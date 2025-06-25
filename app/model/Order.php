@@ -5,9 +5,8 @@
  * Handles order-related database operations
  */
 
-class Order extends BaseModel
+class Order
 {
-    protected $table = 'orders';
     
     /**
      * Get database connection
@@ -148,11 +147,50 @@ class Order extends BaseModel
     public static function updateOrderStatus($orderId, $status)
     {
         $pdo = self::getDatabaseConnection();
-        
+
         $sql = "UPDATE orders SET order_status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([$status, $orderId]);
     }
+
+    /**
+     * Update order details
+     */
+    public static function updateOrderDetails($orderId, $data)
+    {
+        try {
+            $pdo = self::getDatabaseConnection();
+
+            $sql = "UPDATE orders SET
+                        customer_name = ?,
+                        customer_email = ?,
+                        customer_phone = ?,
+                        order_status = ?,
+                        payment_status = ?,
+                        special_instructions = ?,
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE id = ?";
+
+            $stmt = $pdo->prepare($sql);
+            $result = $stmt->execute([
+                $data['customer_name'],
+                $data['customer_email'],
+                $data['customer_phone'] ?? null,
+                $data['order_status'],
+                $data['payment_status'],
+                $data['special_instructions'] ?? null,
+                $orderId
+            ]);
+
+            return $result && $stmt->rowCount() > 0;
+
+        } catch (Exception $e) {
+            error_log("Error updating order details: " . $e->getMessage());
+            return false;
+        }
+    }
+
+
     
     /**
      * Get orders for a user
@@ -198,17 +236,87 @@ class Order extends BaseModel
     public static function getRecentOrders($limit = 50)
     {
         $pdo = self::getDatabaseConnection();
-        
-        $sql = "SELECT o.*, u.full_name as user_name, 
-                       COUNT(oi.id) as item_count
-                FROM orders o 
-                LEFT JOIN users u ON o.user_id = u.id 
+
+        $sql = "SELECT o.*, u.full_name as user_name,
+                       COUNT(oi.id) as item_count,
+                       GROUP_CONCAT(DISTINCT oi.item_type) as item_types,
+                       GROUP_CONCAT(DISTINCT oi.item_name SEPARATOR ', ') as item_names
+                FROM orders o
+                LEFT JOIN users u ON o.user_id = u.id
                 LEFT JOIN order_items oi ON o.id = oi.order_id
-                GROUP BY o.id 
-                ORDER BY o.created_at DESC 
+                GROUP BY o.id
+                ORDER BY o.created_at DESC
                 LIMIT ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$limit]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Process the orders to determine coffee type
+        foreach ($orders as &$order) {
+            $order['coffee_type'] = self::determineCoffeeType($order['item_types']);
+        }
+
+        return $orders;
     }
+
+    /**
+     * Determine the primary coffee type for an order
+     */
+    private static function determineCoffeeType($itemTypes)
+    {
+        if (empty($itemTypes)) {
+            return 'Unknown';
+        }
+
+        $types = explode(',', $itemTypes);
+
+        // Check for DIY coffee first
+        if (in_array('diy_coffee', $types) || in_array('diy', $types)) {
+            return 'DIY';
+        }
+
+        // Check for premade coffee
+        if (in_array('premade_coffee', $types) || in_array('premade', $types)) {
+            return 'Premade';
+        }
+
+        // Check for other types
+        if (in_array('pastry', $types)) {
+            return 'Pastry';
+        }
+
+        return 'Other';
+    }
+
+    /**
+     * Delete order and its items
+     */
+    public static function deleteOrder($orderId)
+    {
+        try {
+            $pdo = self::getDatabaseConnection();
+            $pdo->beginTransaction();
+
+            // Delete order items first (foreign key constraint)
+            $itemSql = "DELETE FROM order_items WHERE order_id = ?";
+            $itemStmt = $pdo->prepare($itemSql);
+            $itemStmt->execute([$orderId]);
+
+            // Delete the order
+            $orderSql = "DELETE FROM orders WHERE id = ?";
+            $orderStmt = $pdo->prepare($orderSql);
+            $result = $orderStmt->execute([$orderId]);
+
+            $pdo->commit();
+            return $result && $orderStmt->rowCount() > 0;
+
+        } catch (Exception $e) {
+            if ($pdo && $pdo->inTransaction()) {
+                $pdo->rollback();
+            }
+            error_log("Error deleting order: " . $e->getMessage());
+            return false;
+        }
+    }
+
 }
